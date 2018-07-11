@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block links %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<script src="{{ url_for('static', filename='js/_external_/interact.min.js') }}"></script>
+{% endblock %}
+
+{% block navbar %}
+<button type="button" id="generate">Generate</button>
+{% endblock %}
+
+{% block content %}
+<!-- WARNING: no-select is temperamental!
+https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
+<div id="content" class="no-select">
+    <div id="sidebar" class="span span-2 padded">
+        <div class="obj-type padded" id="obj-type-table">
+            <p class="obj-type-name">Table</p>
+            <img class="obj-type-img" src="{{ url_for('static', filename='images/table-icon.png') }}">
+            <div class="hidden" id="obj-type-table-template">
+                <div class="obj-instance obj-instance-table">
+                    <span>Table Name: tbl</span>
+                    <input type="text" placeholder="NewTable"></input>
+                    <img src="{{ url_for('static', filename='images/settings.png') }}" class="settings-button">
+                    <hr>
+                    <div class="obj-instance-table-fields">
+                        <!-- fields go here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="obj-type padded" id="obj-type-field">
+            <p class="obj-type-name">Field</p>
+            <img class="obj-type-img" src="{{ url_for('static', filename='images/field-icon.png') }}">
+            <div class="hidden" id="obj-type-field-template">
+                <div class="obj-instance obj-instance-field">
+                    <span>Name: </span>
+                    <input type="text" placeholder="NewField"></input>
+                    <img src="{{ url_for('static', filename='images/settings.png') }}" class="settings-button">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="workspace" class="span span-10">
+         <!-- dynamic content (created from JS) -->
+    </div>
+</div>
+{% endblock %}
+
+{% block end_hook %}
+<script src="{{ url_for('static', filename='js/interaction.js') }}"></script>
+{% endblock %}

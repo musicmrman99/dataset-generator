@@ -1,0 +1,113 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+
+    font-size: 16px;
+}
+
+/* High-Level Structure */
+/* -------------------------------------------------- */
+
+body {
+    position: relative;
+    min-height: 100vh;
+    min-width: 100vw;
+    background-color: #333333;
+}
+
+/* General Styling */
+/* -------------------------------------------------- */
+
+h1,h2,h3,h4,h5,h6,p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 { font-size: 3em; }
+h2 { font-size: 2.4em; }
+h3 { font-size: 1.9em; }
+h4 { font-size: 1.5em; }
+h5 { font-size: 1.3em; }
+h6 { font-size: 1.1em; }
+p { line-height: 1.4; }
+
+h1,h2,h3,h4,h5,h6 { color: #0f0f0f; }
+p { color: #0f0f0f; }
+a { color: #7f3f3f; }
+a:visited { color: #7f3f3f; }
+a:hover { color: #502828; }
+a:active { color: #221111; }
+
+a:hover, a:active, a:focus { text-decoration: none; }
+
+/* General Positioning and Sizing */
+/* -------------------------------------------------- */
+
+.span-container { width: 100%; }
+.span-container:after { clear: left; }
+.span {
+    width: 100%;
+    height: 100%;
+    float: left;
+}
+.span-2 { width: calc(100% / 12 * 2); }
+.span-4 { width: calc(100% / 12 * 4); }
+.span-6 { width: calc(100% / 12 * 6); }
+.span-8 { width: calc(100% / 12 * 8); }
+.span-10 { width: calc(100% / 12 * 10); }
+.span-12 { width: 100%; }
+
+.padded { padding: 10px; }
+.hidden { display: none; }
+
+.settings-button {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+}
+
+/* General Interaction */
+/* -------------------------------------------------- */
+
+/* WARNING: no-select is temperamental!
+https://developer.mozilla.org/en-US/docs/Web/CSS/user-select */
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Page Elements */
+/* -------------------------------------------------- */
+
+/* Header */
+
+header {
+    height: 60px;
+    background-color: #222222;
+}
+header p {
+    color: #f0f0f0;
+    font-size: 1.3em;
+}
+#title { text-align: center; }
+
+/* Footer */
+
+#footer-overlap { height: 100px; }
+footer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+    height: 100px;
+    
+    background-color: #222222;
+}
+footer p {
+    text-align: center;
+    color: #f0f0f0;
+}

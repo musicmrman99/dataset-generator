@@ -1,0 +1,75 @@
+/* Navbar (block) */
+
+#generate {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+
+    transition-duration: 0.2s;
+    background-color: #79df71;
+    color: #0f0f0f;
+}
+#generate:hover { background-color: #2adb1d; }
+
+/* Content (wrapper for other elements, below) */
+
+#content {
+    position: relative;
+    width: 100%;
+    /* 60px and 100px are the sizes of the header and footer.
+    If these change, UPDATE THIS CSS or usability will suffer! */
+    height: calc(100vh - 60px - 100px);
+}
+
+/* Sidebar */
+
+#sidebar {
+    background-color: #808080;
+}
+.obj-type {
+    background-color: #c0c0c0;
+    height: 60px;
+    margin: 0 0 10px 0;
+}
+.obj-type-name {
+    display: inline-block;
+}
+.obj-type-img {
+    float: right;
+    height: 100%;
+    width: auto;
+}
+
+/* Obj Types */
+
+.obj-instance-table {
+    display: inline-block;
+    background-color: #c0c0c0;
+    min-width: 60px;
+    min-height: 60px;
+}
+.obj-instance-table hr {
+    margin: 5px 0;
+}
+
+.obj-instance-field {
+    background-color: #c0c0c0;
+}
+
+/* Workspace */
+
+#workspace {
+    background-color: #f0f0f0;
+    height: 100%;
+}
+
+/* Interact JS */
+
+/* Change these later if you want - no need to dive into JS :) */
+.dropzone { border: 2px dashed transparent; }
+.dropzone-create-dragactive { border-color: #7971df; }
+.dropzone-create-active { border-color: #2a1ddb; }
+.dropzone-move-dragactive { border-color: #79df71; }
+.dropzone-move-active { border-color: #2adb1d; }
+.dropzone-delete-dragactive { border-color: #df7971; }
+.dropzone-delete-active { border-color: #db2a1d; }
