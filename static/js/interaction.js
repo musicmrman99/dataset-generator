@@ -7,7 +7,8 @@ initialise its INTERNAL object, thereby removing ALL of your custom properties!
 */
 
 /*
-WARNING: This is largely inheritance through the back door. It's even worse ...
+WARNING: This is isn't only largely inheritance through the back door.
+It's even worse ... :|
 */
 
 /*
