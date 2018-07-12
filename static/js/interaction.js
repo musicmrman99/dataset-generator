@@ -48,7 +48,8 @@ function draggable (assign) {
     return Object.assign({
         inertia: false, // disable inertial throwing
         autoScroll: false, // enable auto-scroll
-    
+        ignoreFrom: "input, button, a",
+
         // can only be moved within the content area
         restrict: restrictTo(null),
 
