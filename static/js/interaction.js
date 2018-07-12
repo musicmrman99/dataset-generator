@@ -187,102 +187,113 @@ Interaction Setup
 --------------------------------------------------
 */
 
+function setup_workspace_dropzone () {
+    // Actually do the work
+    var base_drop = dropzone(dz_types.create);
+    var base_drop__ondrop = base_drop.ondrop;
+    interact("#workspace").dropzone(Object.assign(base_drop, {
+        accept: "#obj-type-table",
+        ondrop: function (event) {
+            base_drop__ondrop(event);
+            table.create(event.target)
+        }
+    }));
+}
+
+function setup_sidebar_dropzone () {
+    var base_drop = dropzone(dz_types.delete);
+    var base_drop__ondrop = base_drop.ondrop;
+    interact("#sidebar").dropzone(Object.assign(base_drop, {
+        accept: ".obj-instance-table, .obj-instance-field",
+        ondrop: function (event) {
+            base_drop__ondrop(event);
+            if (table.is_table(event.relatedTarget)) {
+                table.delete(event.relatedTarget);
+            } else if (field.is_field(event.relatedTarget)) {
+                field.delete(event.relatedTarget);
+            }
+        }
+    }));
+}
+
+function setup_table_dropzone () {
+    var base_drop_create = dropzone(dz_types.create);
+    var base_drop_move = dropzone(dz_types.move);
+    var base_drop = {
+        ondropactivate: function (event) {
+            if (field.is_field_type(event.relatedTarget)) {
+                base_drop_create.ondropactivate(event);
+            } else if (field.is_field(event.relatedTarget)) {
+                base_drop_move.ondropactivate(event);
+            }
+        },
+        ondragenter: function (event) {
+            if (field.is_field_type(event.relatedTarget)) {
+                base_drop_create.ondragenter(event);
+            } else if (field.is_field(event.relatedTarget)) {
+                base_drop_move.ondragenter(event);
+            }
+        },
+        ondragleave: function (event) {
+            if (field.is_field_type(event.relatedTarget)) {
+                base_drop_create.ondragleave(event);
+            } else if (field.is_field(event.relatedTarget)) {
+                base_drop_move.ondragleave(event);
+            }
+        },
+        ondrop: function (event) {
+            if (field.is_field_type(event.relatedTarget)) {
+                base_drop_create.ondrop(event);
+            } else if (field.is_field(event.relatedTarget)) {
+                base_drop_move.ondrop(event);
+            }
+        },
+        ondropdeactivate: function (event) {
+            if (field.is_field_type(event.relatedTarget)) {
+                base_drop_create.ondropdeactivate(event);
+            } else if (field.is_field(event.relatedTarget)) {
+                base_drop_move.ondropdeactivate(event);
+            }
+        }
+    }
+    var base_drop__ondrop = base_drop.ondrop;
+
+    interact(".obj-instance-table").dropzone(Object.assign(base_drop, {
+        accept: "#obj-type-field, .obj-instance-field",
+        ondrop: function (event) {
+            base_drop__ondrop(event);
+            if (field.is_field_type(event.relatedTarget)) {
+                field.create(event.target);
+            } else if (field.is_field(event.relatedTarget)) {
+                field.move(event.relatedTarget, event.target);
+            }
+        }
+    }));
+}
+
+// Create interactable objects
+// ----------
+
 interact('.obj-type').draggable(resetting_draggable());
 interact('.obj-instance-table').draggable(draggable());
 interact('.obj-instance-field').draggable(resetting_draggable());
 
-// Add the dropzone class
-document.getElementById("workspace").classList.add("dropzone");
-
-// Actually do the work
-var base_drop = dropzone(dz_types.create);
-var base_drop__ondrop = base_drop.ondrop;
-interact("#workspace").dropzone(Object.assign(base_drop, {
-    accept: "#obj-type-table",
-    ondrop: function (event) {
-        base_drop__ondrop(event);
-        table.create(event.target)
-    }
-}));
-
+// Create dropzones
 // ----------
 
-// Add the dropzone class
+setup_workspace_dropzone();
+setup_sidebar_dropzone();
+setup_table_dropzone();
+
+// Add the dropzone class to relevant DOM Elements
+// ----------
+
+document.getElementById("workspace").classList.add("dropzone");
+
 var elem_list = document.querySelectorAll("#sidebar");
 elem_list.forEach(function (elem) {
     elem.classList.add("dropzone");
 })
 
-// Actually do the work
-var base_drop = dropzone(dz_types.delete);
-var base_drop__ondrop = base_drop.ondrop;
-interact("#sidebar").dropzone(Object.assign(base_drop, {
-    accept: ".obj-instance-table, .obj-instance-field",
-    ondrop: function (event) {
-        base_drop__ondrop(event);
-        if (table.is_table(event.relatedTarget)) {
-            table.delete(event.relatedTarget);
-        } else if (field.is_field(event.relatedTarget)) {
-            field.delete(event.relatedTarget);
-        }
-    }
-}));
-
-// ----------
-
-// Here, the dropzone class is set upon creation.
+// The dropzone class is set upon creation of objects.
 // See table.create() and field.create()
-
-// Actually do the work
-var base_drop_create = dropzone(dz_types.create);
-var base_drop_move = dropzone(dz_types.move);
-var base_drop = {
-    ondropactivate: function (event) {
-        if (field.is_field_type(event.relatedTarget)) {
-            base_drop_create.ondropactivate(event);
-        } else if (field.is_field(event.relatedTarget)) {
-            base_drop_move.ondropactivate(event);
-        }
-    },
-    ondragenter: function (event) {
-        if (field.is_field_type(event.relatedTarget)) {
-            base_drop_create.ondragenter(event);
-        } else if (field.is_field(event.relatedTarget)) {
-            base_drop_move.ondragenter(event);
-        }
-    },
-    ondragleave: function (event) {
-        if (field.is_field_type(event.relatedTarget)) {
-            base_drop_create.ondragleave(event);
-        } else if (field.is_field(event.relatedTarget)) {
-            base_drop_move.ondragleave(event);
-        }
-    },
-    ondrop: function (event) {
-        if (field.is_field_type(event.relatedTarget)) {
-            base_drop_create.ondrop(event);
-        } else if (field.is_field(event.relatedTarget)) {
-            base_drop_move.ondrop(event);
-        }
-    },
-    ondropdeactivate: function (event) {
-        if (field.is_field_type(event.relatedTarget)) {
-            base_drop_create.ondropdeactivate(event);
-        } else if (field.is_field(event.relatedTarget)) {
-            base_drop_move.ondropdeactivate(event);
-        }
-    }
-}
-var base_drop__ondrop = base_drop.ondrop;
-
-interact(".obj-instance-table").dropzone(Object.assign(base_drop, {
-    accept: "#obj-type-field, .obj-instance-field",
-    ondrop: function (event) {
-        base_drop__ondrop(event);
-        if (field.is_field_type(event.relatedTarget)) {
-            field.create(event.target);
-        } else if (field.is_field(event.relatedTarget)) {
-            field.move(event.relatedTarget, event.target);
-        }
-    }
-}));
