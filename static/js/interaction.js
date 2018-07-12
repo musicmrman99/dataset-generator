@@ -22,15 +22,15 @@ var base_draggable_callbacks = Object.freeze({
         var target = event.target;
 
         // Implement 'normal' drag behaviour!
-        var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-        var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+        var x = (parseFloat(target.getAttribute("data-x")) || 0) + event.dx;
+        var y = (parseFloat(target.getAttribute("data-y")) || 0) + event.dy;
     
         target.style.webkitTransform =
         target.style.transform =
-        'translate('+x+'px, '+y+'px)';
+        "translate("+x+"px, "+y+"px)";
     
-        target.setAttribute('data-x', x);
-        target.setAttribute('data-y', y);
+        target.setAttribute("data-x", x);
+        target.setAttribute("data-y", y);
     },
 
     onend: function (event) {}
@@ -71,10 +71,10 @@ function resetting_draggable (assign) {
             // Translate the element back to original position.
             target.style.webkitTransform =
             target.style.transform =
-            'translate(0px, 0px)';
+            "translate(0px, 0px)";
     
-            target.setAttribute('data-x', 0);
-            target.setAttribute('data-y', 0);
+            target.setAttribute("data-x", 0);
+            target.setAttribute("data-y", 0);
         }
     }, assign);
 }
@@ -86,25 +86,25 @@ Dropzone Types
 
 function dropzone(type, assign) {
     return Object.assign({
-        accept: '*',
+        accept: "*",
         overlap: 0.50,
 
         ondropactivate: function (event) {
-            event.target.classList.add('dropzone-'+type+'-dragactive');
+            event.target.classList.add("dropzone-"+type+"-dragactive");
         },
         ondragenter: function (event) {
-            event.target.classList.add('dropzone-'+type+'-active');
+            event.target.classList.add("dropzone-"+type+"-active");
         },
         ondragleave: function (event) {
-            event.target.classList.remove('dropzone-'+type+'-active');
+            event.target.classList.remove("dropzone-"+type+"-active");
         },
         ondrop: function (event) {
-            event.target.classList.remove('dropzone-'+type+'-dragactive');
-            event.target.classList.remove('dropzone-'+type+'-active');
+            event.target.classList.remove("dropzone-"+type+"-dragactive");
+            event.target.classList.remove("dropzone-"+type+"-active");
         },
         ondropdeactivate: function (event) {
-            event.target.classList.remove('dropzone-'+type+'-dragactive');
-            event.target.classList.remove('dropzone-'+type+'-active');
+            event.target.classList.remove("dropzone-"+type+"-dragactive");
+            event.target.classList.remove("dropzone-"+type+"-active");
         }
     }, assign)
 }
@@ -274,9 +274,9 @@ function setup_table_dropzone () {
 // Create interactable objects
 // ----------
 
-interact('.obj-type').draggable(resetting_draggable());
-interact('.obj-instance-table').draggable(draggable());
-interact('.obj-instance-field').draggable(resetting_draggable());
+interact(".obj-type").draggable(resetting_draggable());
+interact(".obj-instance-table").draggable(draggable());
+interact(".obj-instance-field").draggable(resetting_draggable());
 
 // Create dropzones
 // ----------
