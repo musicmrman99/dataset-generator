@@ -16,14 +16,22 @@ Draggable Types
 */
 
 var base_draggable_callbacks = Object.freeze({
-    onstart: function (event) {},
+    onstart: function (event) {
+        var target = event.target;
+        if (target.getAttribute('data-x') == null) {
+            target.setAttribute('data-x', 0);
+        }
+        if (target.getAttribute('data-y') == null) {
+            target.setAttribute('data-y', 0);
+        }
+    },
 
     onmove: function (event) {
         var target = event.target;
-
+        
         // Implement 'normal' drag behaviour!
-        var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-        var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+        var x = parseFloat(target.getAttribute('data-x')) + event.dx;
+        var y = parseFloat(target.getAttribute('data-y')) + event.dy;
     
         target.style.webkitTransform =
         target.style.transform =
@@ -53,9 +61,9 @@ function draggable (assign) {
         // can only be moved within the content area
         restrict: restrictTo(null),
 
-        onstart: function (event) { base_draggable_callbacks.onmove(event); },
+        onstart: function (event) { base_draggable_callbacks.onstart(event); },
         onmove: function (event) { base_draggable_callbacks.onmove(event); },
-        onend: function (event) { base_draggable_callbacks.onmove(event); }
+        onend: function (event) { base_draggable_callbacks.onend(event); }
     }, assign);
 }
 
