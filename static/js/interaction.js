@@ -48,7 +48,7 @@ function draggable (assign) {
     return Object.assign({
         inertia: false, // disable inertial throwing
         autoScroll: false, // enable auto-scroll
-        ignoreFrom: "input, button, a",
+        ignoreFrom: "input, button, a, .overlay",
 
         // can only be moved within the content area
         restrict: restrictTo(null),
@@ -122,6 +122,28 @@ Object and Object Instance Types (and their functions)
 */
 
 var table = {
+    // check if is the table type itself
+    is_table_type: function (element) {
+        return element.id === "obj-type-table";
+    },
+
+    // check if is a table instance
+    is_table: function (element) {
+        return element.classList.contains("obj-instance-table");
+    },
+
+    // get the table this element belongs to
+    // if it doesn't belong to a table, then return null
+    get_container: function (element) {
+        while (!this.is_table(element)) {
+            element = element.parentElement;
+            if (element == null) {
+                return null;
+            }
+        }
+        return element;
+    },
+
     // create a new table in target
     create: function (target) {
         var template = document.getElementById("obj-type-table-template");
@@ -137,18 +159,41 @@ var table = {
         table.remove();
     },
 
-    // check if is the table type itself
-    is_table_type: function(element) {
-        return element.id === "obj-type-table";
+    open_settings: function (inner_element) {
+        var table = this.get_container(inner_element);
+        table.getElementsByClassName("obj-instance-table-settings").item(0)
+            .classList.remove("hidden");
     },
-
-    // check if is a table instance
-    is_table: function (element) {
-        return element.classList.contains("obj-instance-table");
+    close_settings: function (inner_element) {
+        var table = this.get_container(inner_element);
+        table.getElementsByClassName("obj-instance-table-settings").item(0)
+            .classList.add("hidden");
     }
 }
 
 var field = {
+    // check if is the field type itself
+    is_field_type: function(element) {
+        return element.id === "obj-type-field";
+    },
+
+    // check if is a field instance
+    is_field: function (element) {
+        return element.classList.contains("obj-instance-field");
+    },
+
+    // get the field this element belongs to
+    // if it doesn't belong to a field, then return null
+    get_container: function (element) {
+        while (!this.is_field(element)) {
+            element = element.parentElement;
+            if (element == null) {
+                return null;
+            }
+        }
+        return element;
+    },
+
     // create a new field in the target table
     create: function (target) {
         var template = document.getElementById("obj-type-field-template");
@@ -172,14 +217,15 @@ var field = {
             .appendChild(field);
     },
 
-    // check if is the field type itself
-    is_field_type: function(element) {
-        return element.id === "obj-type-field";
+    open_settings: function (inner_element) {
+        var field = this.get_container(inner_element);
+        field.getElementsByClassName("obj-instance-field-settings").item(0)
+            .classList.remove("hidden");
     },
-
-    // check if is a field instance
-    is_field: function (element) {
-        return element.classList.contains("obj-instance-field");
+    close_settings: function (inner_element) {
+        var field = this.get_container(inner_element);
+        field.getElementsByClassName("obj-instance-field-settings").item(0)
+            .classList.add("hidden");
     }
 }
 
