@@ -20,9 +20,6 @@ This behaviour is apparently required by the spec, though many consider it a bug
 - https://bugs.chromium.org/p/chromium/issues/detail?id=20574&desc=2
 - https://www.w3.org/Bugs/Public/show_bug.cgi?id=16328
     - continued: https://github.com/w3c/csswg-drafts/issues/913
-
-WARNING: The fix for this assumes that only one table's settings can be
-opened at once!
 */
 
 /*
