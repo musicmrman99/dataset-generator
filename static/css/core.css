@@ -19,7 +19,7 @@ body {
 /* Overlay */
 
 /* NOTE: this depends on whether it has a parent element with transform: set.
-See interaction.js INFORMATION section */
+See /static/js/interaction-notes.md */
 .overlay {
     position: fixed;
     width: 100vw;
@@ -123,7 +123,7 @@ img {
 .padded { padding: 10px; }
 .hidden { display: none; }
 
-/* NOTE: See interaction.js INFORMATION section */
+/* NOTE: See /static/js/interaction-notes.md */
 .no-transform { transform: none !important; }
 .settings-button {
     display: inline-block;

@@ -1,31 +1,6 @@
 "use strict";
 
 /*
-WARNING: InteractJS uses the KNOWN properties of the object you give it to
-initialise its INTERNAL object, thereby removing ALL of your custom properties!
-... So don't recon on using 'this' anywhere >:(
-*/
-
-/*
-WARNING: This is isn't only largely inheritance through the back door.
-It's even worse ... :|
-*/
-
-/* INFORMATION:
-An issue arose relating to the behaviour of position: and transform: properties
-where position: absolute|fixed|sticky did NOT work as expected inside an element
-with transform: set as anything other than 'none'.
-
-This behaviour is apparently required by the spec, though many consider it a bug:
-- https://bugs.chromium.org/p/chromium/issues/detail?id=20574&desc=2
-- https://www.w3.org/Bugs/Public/show_bug.cgi?id=16328
-    - continued: https://github.com/w3c/csswg-drafts/issues/913
-
-WARNING: The fix for this assumes that only one table's settings can be
-opened at once!
-*/
-
-/*
 Draggable Types
 --------------------------------------------------
 */
@@ -84,7 +59,7 @@ function draggable (assign) {
 
 function resetting_draggable (assign) {
     var base_draggable = draggable();
-    var base_draggable__onend = base_draggable.onend; // NOTE: breaks 'this'
+    var base_draggable__onend = base_draggable.onend;
 
     return Object.assign(base_draggable, {
         onend: function (event) {
@@ -185,14 +160,16 @@ var table = {
     open_settings: function (inner_element) {
         var table = this.get_container(inner_element);
 
-        table.classList.add("no-transform"); // NOTE: see top of file
+        // NOTE: See /static/js/interaction-notes.md
+        table.classList.add("no-transform");
         table.getElementsByClassName("obj-instance-table-settings").item(0)
             .classList.remove("hidden");
     },
     close_settings: function (inner_element) {
         var table = this.get_container(inner_element);
 
-        table.classList.remove("no-transform"); // NOTE: see top of file
+        // NOTE: See /static/js/interaction-notes.md
+        table.classList.remove("no-transform");
         table.getElementsByClassName("obj-instance-table-settings").item(0)
             .classList.add("hidden");
     }
@@ -247,7 +224,7 @@ var field = {
     open_settings: function (inner_element) {
         var field = this.get_container(inner_element);
 
-        // NOTE: see top of file
+        // NOTE: See /static/js/interaction-notes.md
         var tbl = table.get_container(field);
         tbl.classList.add("no-transform");
 
@@ -257,7 +234,7 @@ var field = {
     close_settings: function (inner_element) {
         var field = this.get_container(inner_element);
 
-        // NOTE: see top of file
+        // NOTE: See /static/js/interaction-notes.md
         var tbl = table.get_container(field);
         tbl.classList.remove("no-transform");
 
@@ -272,7 +249,6 @@ Interaction Setup
 */
 
 function setup_workspace_dropzone () {
-    // Actually do the work
     var base_drop = dropzone(dz_types.create);
     var base_drop__ondrop = base_drop.ondrop;
     interact("#workspace").dropzone(Object.assign(base_drop, {
