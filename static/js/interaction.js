@@ -153,38 +153,38 @@ var table = {
     },
 
     // delete table
-    delete: function (table) {
-        table.remove();
+    delete: function (tbl) {
+        tbl.remove();
     },
 
     open_settings: function (inner_element) {
-        var table = this.get_container(inner_element);
+        var tbl = this.get_container(inner_element);
 
         // get the table's name
-        var tblName = table.querySelector("[data-name=table-name]").value ||
+        var tblName = tbl.querySelector("[data-name=table-name]").value ||
             "[undefined]";
 
         // insert them into the settings overlay's title
-        var settingsOverlay = table
+        var settingsOverlay = tbl
             .getElementsByClassName("obj-instance-table-settings").item(0);
         settingsOverlay
             .getElementsByClassName("settings-title").item(0)
             .textContent = tblName;
         
         // NOTE: See /static/js/interaction-notes.md
-        table.classList.add("no-transform");
+        tbl.classList.add("no-transform");
         
         settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
-        var table = this.get_container(inner_element);
+        var tbl = this.get_container(inner_element);
 
-        var settingsOverlay = table
+        var settingsOverlay = tbl
             .getElementsByClassName("obj-instance-table-settings").item(0);
         settingsOverlay.classList.add("hidden");
 
         // NOTE: See /static/js/interaction-notes.md
-        table.classList.remove("no-transform");
+        tbl.classList.remove("no-transform");
     }
 }
 
