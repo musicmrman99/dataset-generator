@@ -16,6 +16,64 @@ body {
     background-color: #333333;
 }
 
+/* Overlay */
+
+/* NOTE: this depends on whether it has a parent element with transform: set.
+See interaction.js INFORMATION section */
+.overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 100; 
+}
+
+.overlay-content {
+    position: fixed;
+    width: 90vw;
+    height: 90vh;
+    top: 5vh;
+    left: 5vw;
+    background-color: #f0f0f0;
+    border: 1px solid #000000;
+    overflow-y: scroll;
+}
+
+@media screen and (min-width: 1024px) {
+    .overlay-content {
+        width: 70vw;
+        height: 70vh;
+        top: 15vh;
+        left: 15vw;
+    }
+}
+
+.overlay-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
+    margin: 10px;
+    padding: 2px;
+
+    border: 1px solid #606060;
+    border-radius: 2px;
+
+    /* for SVG elements */
+    stroke: #606060;
+    stroke-width: 2;
+}
+
+.overlay-close:hover {
+    border-color: #000000;
+    stroke: #000000;
+}
+
 /* General Styling */
 /* -------------------------------------------------- */
 
@@ -40,6 +98,11 @@ a:active { color: #221111; }
 
 a:hover, a:active, a:focus { text-decoration: none; }
 
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
 /* General Positioning and Sizing */
 /* -------------------------------------------------- */
 
@@ -60,6 +123,8 @@ a:hover, a:active, a:focus { text-decoration: none; }
 .padded { padding: 10px; }
 .hidden { display: none; }
 
+/* NOTE: See interaction.js INFORMATION section */
+.no-transform { transform: none !important; }
 .settings-button {
     display: inline-block;
     width: 32px;
