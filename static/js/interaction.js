@@ -160,18 +160,31 @@ var table = {
     open_settings: function (inner_element) {
         var table = this.get_container(inner_element);
 
+        // get the table's name
+        var tblName = table.querySelector("[data-name=table-name]").value ||
+            "[undefined]";
+
+        // insert them into the settings overlay's title
+        var settingsOverlay = table
+            .getElementsByClassName("obj-instance-table-settings").item(0);
+        settingsOverlay
+            .getElementsByClassName("settings-title").item(0)
+            .textContent = tblName;
+        
         // NOTE: See /static/js/interaction-notes.md
         table.classList.add("no-transform");
-        table.getElementsByClassName("obj-instance-table-settings").item(0)
-            .classList.remove("hidden");
+        
+        settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
         var table = this.get_container(inner_element);
 
+        var settingsOverlay = table
+            .getElementsByClassName("obj-instance-table-settings").item(0);
+        settingsOverlay.classList.add("hidden");
+
         // NOTE: See /static/js/interaction-notes.md
         table.classList.remove("no-transform");
-        table.getElementsByClassName("obj-instance-table-settings").item(0)
-            .classList.add("hidden");
     }
 }
 
@@ -223,23 +236,36 @@ var field = {
 
     open_settings: function (inner_element) {
         var field = this.get_container(inner_element);
-
-        // NOTE: See /static/js/interaction-notes.md
         var tbl = table.get_container(field);
+
+        // get the table's and field's names
+        var tblName = tbl.querySelector("[data-name=table-name]").value ||
+            "[undefined]";
+        var fieldName = field.querySelector("[data-name=field-name]").value ||
+            "[undefined]";
+
+        // insert them into the settings overlay's title
+        var settingsOverlay = field
+            .getElementsByClassName("obj-instance-field-settings").item(0);
+        settingsOverlay
+            .getElementsByClassName("settings-title").item(0)
+            .textContent = tblName+"."+fieldName;
+        
+        // NOTE: See /static/js/interaction-notes.md
         tbl.classList.add("no-transform");
 
-        field.getElementsByClassName("obj-instance-field-settings").item(0)
-            .classList.remove("hidden");
+        settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
         var field = this.get_container(inner_element);
+        var tbl = table.get_container(field);
+
+        var settingsOverlay = field
+            .getElementsByClassName("obj-instance-field-settings").item(0);
+        settingsOverlay.classList.add("hidden");
 
         // NOTE: See /static/js/interaction-notes.md
-        var tbl = table.get_container(field);
         tbl.classList.remove("no-transform");
-
-        field.getElementsByClassName("obj-instance-field-settings").item(0)
-            .classList.add("hidden");
     }
 }
 
