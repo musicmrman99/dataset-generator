@@ -18,6 +18,8 @@ body {
 
 /* Overlay */
 
+/* NOTE: this depends on whether it has a parent element with transform: set.
+See interaction.js INFORMATION section */
 .overlay {
     position: fixed;
     width: 100vw;
@@ -121,6 +123,8 @@ img {
 .padded { padding: 10px; }
 .hidden { display: none; }
 
+/* NOTE: See interaction.js INFORMATION section */
+.no-transform { transform: none !important; }
 .settings-button {
     display: inline-block;
     width: 32px;

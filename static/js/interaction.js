@@ -10,6 +10,20 @@ initialise its INTERNAL object, thereby removing ALL of your custom properties!
 WARNING: This is largely inheritance through the back door. It's even worse ...
 */
 
+/* INFORMATION:
+An issue arose relating to the behaviour of position: and transform: properties
+where position: absolute|fixed|sticky did NOT work as expected inside an element
+with transform: set as anything other than 'none'.
+
+This behaviour is apparently required by the spec, though many consider it a bug:
+- https://bugs.chromium.org/p/chromium/issues/detail?id=20574&desc=2
+- https://www.w3.org/Bugs/Public/show_bug.cgi?id=16328
+    - continued: https://github.com/w3c/csswg-drafts/issues/913
+
+WARNING: The fix for this assumes that only one table's settings can be
+opened at once!
+*/
+
 /*
 Draggable Types
 --------------------------------------------------
@@ -169,11 +183,15 @@ var table = {
 
     open_settings: function (inner_element) {
         var table = this.get_container(inner_element);
+
+        table.classList.add("no-transform"); // NOTE: see top of file
         table.getElementsByClassName("obj-instance-table-settings").item(0)
             .classList.remove("hidden");
     },
     close_settings: function (inner_element) {
         var table = this.get_container(inner_element);
+
+        table.classList.remove("no-transform"); // NOTE: see top of file
         table.getElementsByClassName("obj-instance-table-settings").item(0)
             .classList.add("hidden");
     }
@@ -227,11 +245,21 @@ var field = {
 
     open_settings: function (inner_element) {
         var field = this.get_container(inner_element);
+
+        // NOTE: see top of file
+        var tbl = table.get_container(field);
+        tbl.classList.add("no-transform");
+
         field.getElementsByClassName("obj-instance-field-settings").item(0)
             .classList.remove("hidden");
     },
     close_settings: function (inner_element) {
         var field = this.get_container(inner_element);
+
+        // NOTE: see top of file
+        var tbl = table.get_container(field);
+        tbl.classList.remove("no-transform");
+
         field.getElementsByClassName("obj-instance-field-settings").item(0)
             .classList.add("hidden");
     }

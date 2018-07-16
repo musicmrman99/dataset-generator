@@ -26,6 +26,9 @@
 #sidebar {
     background-color: #808080;
 }
+
+/* Obj Types */
+
 .obj-type {
     background-color: #c0c0c0;
     height: 60px;
@@ -40,8 +43,6 @@
     height: 100%;
     width: auto;
 }
-
-/* Obj Types */
 
 .obj-instance-table {
     display: inline-block;
