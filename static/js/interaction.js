@@ -165,14 +165,13 @@ var table = {
 
     open_settings: function (inner_element) {
         var tbl = get_container(inner_element, this.is_table);
+        var settingsOverlay = tbl
+            .getElementsByClassName("obj-instance-table-settings").item(0);
 
-        // get the table's name
+        // insert table's name into the settings overlay's title
         var tblName = tbl.querySelector("[data-name=table-name]").value ||
             "[undefined]";
 
-        // insert them into the settings overlay's title
-        var settingsOverlay = tbl
-            .getElementsByClassName("obj-instance-table-settings").item(0);
         settingsOverlay
             .getElementsByClassName("settings-title").item(0)
             .textContent = tblName;
@@ -180,13 +179,15 @@ var table = {
         // NOTE: See /static/js/interaction-notes.md
         tbl.classList.add("no-transform");
         
+        // Show the overlay
         settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
         var tbl = get_container(inner_element, this.is_table);
-
         var settingsOverlay = tbl
             .getElementsByClassName("obj-instance-table-settings").item(0);
+
+        // Hide the overlay
         settingsOverlay.classList.add("hidden");
 
         // NOTE: See /static/js/interaction-notes.md
@@ -231,16 +232,15 @@ var field = {
     open_settings: function (inner_element) {
         var field = get_container(inner_element, this.is_field);
         var tbl = get_container(field, table.is_table);
+        var settingsOverlay = field
+            .getElementsByClassName("obj-instance-field-settings").item(0);
 
-        // get the table's and field's names
+        // Insert table's and field's names into the settings overlay's title
         var tblName = tbl.querySelector("[data-name=table-name]").value ||
             "[undefined]";
         var fieldName = field.querySelector("[data-name=field-name]").value ||
             "[undefined]";
 
-        // insert them into the settings overlay's title
-        var settingsOverlay = field
-            .getElementsByClassName("obj-instance-field-settings").item(0);
         settingsOverlay
             .getElementsByClassName("settings-title").item(0)
             .textContent = tblName+"."+fieldName;
@@ -248,14 +248,16 @@ var field = {
         // NOTE: See /static/js/interaction-notes.md
         tbl.classList.add("no-transform");
 
+        // Show the overlay
         settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
         var field = get_container(inner_element, this.is_field);
         var tbl = get_container(field, table.is_table);
-
         var settingsOverlay = field
             .getElementsByClassName("obj-instance-field-settings").item(0);
+
+        // Hide the overlay
         settingsOverlay.classList.add("hidden");
 
         // NOTE: See /static/js/interaction-notes.md
