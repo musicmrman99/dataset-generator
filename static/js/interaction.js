@@ -245,6 +245,17 @@ var field = {
             .getElementsByClassName("settings-title").item(0)
             .textContent = tblName+"."+fieldName;
         
+        // Set the names and ids of submittable/labeled inputs to their data-*
+        // values (for grouping functionality, eg. radio buttons)
+        var submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
+        submittableInputs.forEach(function (elem) {
+            elem.name = elem.getAttribute('data-name');
+        });
+        var labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
+        labeledInputs.forEach(function (elem) {
+            elem.id = elem.getAttribute('data-id');
+        });
+
         // NOTE: See /static/js/interaction-notes.md
         tbl.classList.add("no-transform");
 
@@ -256,6 +267,17 @@ var field = {
         var tbl = get_container(field, table.is_table);
         var settingsOverlay = field
             .getElementsByClassName("obj-instance-field-settings").item(0);
+
+        // Unset the names and ids of submittable/labeled inputs from their
+        // data-* values (for grouping functionality, eg. radio buttons)
+        var submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
+        submittableInputs.forEach(function (elem) {
+            elem.name = "";
+        });
+        var labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
+        labeledInputs.forEach(function (elem) {
+            elem.id = "";
+        });
 
         // Hide the overlay
         settingsOverlay.classList.add("hidden");
