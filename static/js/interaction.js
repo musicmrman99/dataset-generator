@@ -1,6 +1,24 @@
 "use strict";
 
 /*
+Support Functions
+--------------------------------------------------
+*/
+
+// Get the container this element is in. An element is a container if
+// isContainer returns true, given that element.
+// If the given element is not in a container, then return null.
+function get_container (element, isContainer) {
+    while (!isContainer(element)) {
+        element = element.parentElement;
+        if (element == null) {
+            return null;
+        }
+    }
+    return element;
+}
+
+/*
 Draggable Types
 --------------------------------------------------
 */
@@ -130,18 +148,6 @@ var table = {
         return element.classList.contains("obj-instance-table");
     },
 
-    // get the table this element belongs to
-    // if it doesn't belong to a table, then return null
-    get_container: function (element) {
-        while (!this.is_table(element)) {
-            element = element.parentElement;
-            if (element == null) {
-                return null;
-            }
-        }
-        return element;
-    },
-
     // create a new table in target
     create: function (target) {
         var template = document.getElementById("obj-type-table-template");
@@ -158,7 +164,7 @@ var table = {
     },
 
     open_settings: function (inner_element) {
-        var tbl = this.get_container(inner_element);
+        var tbl = get_container(inner_element, this.is_table);
 
         // get the table's name
         var tblName = tbl.querySelector("[data-name=table-name]").value ||
@@ -177,7 +183,7 @@ var table = {
         settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
-        var tbl = this.get_container(inner_element);
+        var tbl = get_container(inner_element, this.is_table);
 
         var settingsOverlay = tbl
             .getElementsByClassName("obj-instance-table-settings").item(0);
@@ -197,18 +203,6 @@ var field = {
     // check if is a field instance
     is_field: function (element) {
         return element.classList.contains("obj-instance-field");
-    },
-
-    // get the field this element belongs to
-    // if it doesn't belong to a field, then return null
-    get_container: function (element) {
-        while (!this.is_field(element)) {
-            element = element.parentElement;
-            if (element == null) {
-                return null;
-            }
-        }
-        return element;
     },
 
     // create a new field in the target table
@@ -235,8 +229,8 @@ var field = {
     },
 
     open_settings: function (inner_element) {
-        var field = this.get_container(inner_element);
-        var tbl = table.get_container(field);
+        var field = get_container(inner_element, this.is_field);
+        var tbl = get_container(field, table.is_table);
 
         // get the table's and field's names
         var tblName = tbl.querySelector("[data-name=table-name]").value ||
@@ -257,8 +251,8 @@ var field = {
         settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
-        var field = this.get_container(inner_element);
-        var tbl = table.get_container(field);
+        var field = get_container(inner_element, this.is_field);
+        var tbl = get_container(field, table.is_table);
 
         var settingsOverlay = field
             .getElementsByClassName("obj-instance-field-settings").item(0);
