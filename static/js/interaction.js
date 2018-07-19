@@ -175,7 +175,7 @@ var settings = {
     activate_radio: function (selectedRadio) {
         // Get the previously selected radio of this container
         var radioFieldset = get_container(selectedRadio, (elem) => {
-            this.is_fieldset(elem, fs_types.radio)
+            return this.is_fieldset(elem, fs_types.radio);
         });
         var currentRadios = radioFieldset.querySelectorAll(
             "input[type=radio][data-active]");
@@ -187,7 +187,7 @@ var settings = {
         var currentRadio = null;
         for (var i=0; 0 < currentRadios.length; i++) {
             if (get_container(currentRadios[i], (elem) => {
-                this.is_fieldset(elem, fs_types.radio)
+                return this.is_fieldset(elem, fs_types.radio);
             }) === radioFieldset) {
                 currentRadio = currentRadios[i];
                 break;
