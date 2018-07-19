@@ -137,11 +137,18 @@ Object and Object Instance Types (and their functions)
 --------------------------------------------------
 */
 
+// fieldset types
+var fs_types = Object.freeze({
+    radio: "radio",
+    checkbox: "checkbox"
+})
+
 var settings = {
-    // check if is a fieldset that only contains radio buttons
-    is_radio_fieldset: function (element) {
+    // check if is a fieldset
+    // if type is given, the fieldset must be of that type as well
+    is_fieldset: function (element, type) {
         return (element.nodeName.toLowerCase() === "fieldset") && 
-            (element.getAttribute("data-input-type") === "radio");
+            (element.getAttribute("data-input-type") === type);
     },
 
     // check if has parameters
@@ -167,7 +174,9 @@ var settings = {
     // done by the browser)
     activate_radio: function (selectedRadio) {
         // Get the previously selected radio of this container
-        var radioFieldset = get_container(selectedRadio, this.is_radio_fieldset);
+        var radioFieldset = get_container(selectedRadio, (elem) => {
+            this.is_fieldset(elem, fs_types.radio)
+        });
         var currentRadios = radioFieldset.querySelectorAll(
             "input[type=radio][data-active]");
 
@@ -177,8 +186,9 @@ var settings = {
         // NOTE: this is linear time, so large inputs (HTML) may be problematic
         var currentRadio = null;
         for (var i=0; 0 < currentRadios.length; i++) {
-            if (get_container(currentRadios[i], this.is_radio_fieldset) ===
-                radioFieldset) {
+            if (get_container(currentRadios[i], (elem) => {
+                this.is_fieldset(elem, fs_types.radio)
+            }) === radioFieldset) {
                 currentRadio = currentRadios[i];
                 break;
             }
