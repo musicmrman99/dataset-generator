@@ -161,10 +161,23 @@ var settings = {
     // this handles all of the work *other than* the actual switching (which is
     // done by the browser)
     activate_radio: function (selectedRadio) {
-        // Get the previously selected radio
+        // Get the previously selected radio of this container
         var radioFieldset = get_container(selectedRadio, this.is_radio_fieldset);
-        var currentRadio = radioFieldset.querySelector(
+        var currentRadios = radioFieldset.querySelectorAll(
             "input[type=radio][data-active]");
+
+        // NOTE: this allows recursive input parameters (ie. an input with
+        //       parameters, which have parameters, etc.) by limiting the
+        //       'active input' to this input set.
+        // NOTE: this is linear time, so large inputs (HTML) may be problematic
+        var currentRadio = null;
+        for (var i=0; 0 < currentRadios.length; i++) {
+            if (get_container(currentRadios[i], this.is_radio_fieldset) ===
+                radioFieldset) {
+                currentRadio = currentRadios[i];
+                break;
+            }
+        }
 
         // De-select previously selected radio
         if (currentRadio != null) {
