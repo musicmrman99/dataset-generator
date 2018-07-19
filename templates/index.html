@@ -66,6 +66,33 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                                 <line x1="0" y1="20" x2="20" y2="0"/>
                             </svg>
 
+                            <fieldset data-input-type="checkbox">
+                                <legend>Key Settings</legend>
+
+                                <div>
+                                    <input type="checkbox" value="pkey" data-id="pkey" data-name="pkey" />
+                                    <label for="pkey">Primary Key</label>
+                                </div>
+
+                                <div>
+                                    <input type="checkbox" value="fkey" data-id="fkey" data-name="fkey" />
+                                    <label for="fkey">Foreign Key</label>
+
+                                    <div class="hidden input-params" data-for="fkey">
+                                        <div>
+                                            <label for="fkey-table">Table:</label>
+                                            <span>tbl</span>
+                                            <input type="text" data-id="fkey-table" data-name="fkey-table" />
+                                        </div>
+
+                                        <div>
+                                            <label for="fkey-field">Field:</label>
+                                            <input type="text" data-id="fkey-field" data-name="fkey-field" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            
                             <fieldset data-input-type="radio">
                                 <legend>Data Type</legend>
 
@@ -210,33 +237,6 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                                         </div>
                                     </div>
                                 </fieldset>
-                            </fieldset>
-
-                            <fieldset data-input-type="checkbox">
-                                <legend>Key Settings</legend>
-
-                                <div>
-                                    <input type="checkbox" value="pkey" data-id="pkey" data-name="pkey" />
-                                    <label for="pkey">Primary Key</label>
-                                </div>
-
-                                <div>
-                                    <input type="checkbox" value="fkey" data-id="fkey" data-name="fkey" />
-                                    <label for="fkey">Foreign Key</label>
-
-                                    <div class="hidden input-params" data-for="fkey">
-                                        <div>
-                                            <label for="fkey-table">Table:</label>
-                                            <span>tbl</span>
-                                            <input type="text" data-id="fkey-table" data-name="fkey-table" />
-                                        </div>
-
-                                        <div>
-                                            <label for="fkey-field">Field:</label>
-                                            <input type="text" data-id="fkey-field" data-name="fkey-field" />
-                                        </div>
-                                    </div>
-                                </div>
                             </fieldset>
                         </div>
                     </div>
