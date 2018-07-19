@@ -114,6 +114,15 @@ legend {
     font-weight: bold;
 }
 
+fieldset fieldset { border: none; }
+fieldset fieldset > legend {
+    padding: 0 5px;
+    font-weight: normal;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 1px 0px;
+}
+
 /* General Positioning and Sizing */
 /* -------------------------------------------------- */
 

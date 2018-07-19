@@ -137,6 +137,51 @@ Object and Object Instance Types (and their functions)
 --------------------------------------------------
 */
 
+var settings = {
+    // check if is a fieldset that only contains radio buttons
+    is_radio_fieldset: function (element) {
+        return (element.nodeName.toLowerCase() === "fieldset") && 
+            (element.getAttribute("data-input-type") === "radio");
+    },
+
+    // check if has parameters
+    has_params: function (input) {
+        return (input.parentElement // should be a div
+            .getElementsByClassName("input-params").length != 0);
+    },
+
+    // toggle (show/hide) the parameters sub-section of an input
+    toggle_params: function (input) {
+        input.parentElement // should be a div
+            .getElementsByClassName("input-params").item(0)
+            .classList.toggle("hidden");
+    },
+
+    // activate the given radio button (likely being passed 'this' on click)
+    // this handles all of the work *other than* the actual switching (which is
+    // done by the browser)
+    activate_radio: function (selectedRadio) {
+        // Get the previously selected radio
+        var radioFieldset = get_container(selectedRadio, this.is_radio_fieldset);
+        var currentRadio = radioFieldset.querySelector(
+            "input[type=radio][data-active]");
+
+        // De-select previously selected radio
+        if (currentRadio != null) {
+            currentRadio.removeAttribute("data-active");
+            if (this.has_params(currentRadio)) {
+                this.toggle_params(currentRadio); // off
+            }
+        }
+
+        // Select new radio
+        selectedRadio.setAttribute("data-active", "true");
+        if (this.has_params(selectedRadio)) {
+            this.toggle_params(selectedRadio); // on
+        }
+    }
+}
+
 var table = {
     // check if is the table type itself
     is_table_type: function (element) {
@@ -212,6 +257,16 @@ var field = {
         var new_obj = template.firstElementChild.cloneNode(true);
         new_obj.classList.add("obj-instance", "obj-instance-field", "dropzone");
 
+        // Set the event listeners for all radio/checkbox inputs of the object's
+        // settings
+        var radioInputs = new_obj.querySelectorAll("input[type=radio]");
+        radioInputs.forEach((radioInput) => {
+            radioInput.addEventListener("click", function () {
+                settings.activate_radio(this);
+            });
+        })
+
+        // Append the new object to the list of fields of the given table
         target.getElementsByClassName("obj-instance-table-fields").item(0)
             .appendChild(new_obj);
         return new_obj;
