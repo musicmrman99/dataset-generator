@@ -157,6 +157,11 @@ var settings = {
             .classList.toggle("hidden");
     },
 
+    /*
+    Radio Buttons
+    ----------
+    */
+
     // activate the given radio button (likely being passed 'this' on click)
     // this handles all of the work *other than* the actual switching (which is
     // done by the browser)
@@ -191,6 +196,20 @@ var settings = {
         selectedRadio.setAttribute("data-active", "true");
         if (this.has_params(selectedRadio)) {
             this.toggle_params(selectedRadio); // on
+        }
+    },
+
+    /*
+    Checkboxes
+    ----------
+    */
+
+    // toggle the given checkbox (likely being passed 'this' on click)
+    // this handles all of the work *other than* the actual check/uncheck (which
+    // is done by the browser)
+    toggle_checkbox: function (checkbox) {
+        if (this.has_params(checkbox)) {
+            this.toggle_params(checkbox); // on/off
         }
     }
 }
@@ -276,6 +295,13 @@ var field = {
         radioInputs.forEach((radioInput) => {
             radioInput.addEventListener("click", function () {
                 settings.activate_radio(this);
+            });
+        })
+
+        var checkboxInputs = new_obj.querySelectorAll("input[type=checkbox]");
+        checkboxInputs.forEach((checkboxInput) => {
+            checkboxInput.addEventListener("click", function () {
+                settings.toggle_checkbox(this);
             });
         })
 
