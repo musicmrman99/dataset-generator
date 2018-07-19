@@ -144,6 +144,11 @@ var fs_types = Object.freeze({
 })
 
 var settings = {
+    /*
+    Support Functions
+    ----------
+    */
+
     // check if is a fieldset
     // if type is given, the fieldset must be of that type as well
     is_fieldset: function (element, type) {
@@ -162,6 +167,63 @@ var settings = {
         input.parentElement // should be a div
             .getElementsByClassName("input-params").item(0)
             .classList.toggle("hidden");
+    },
+
+    /*
+    Setup + Tear-down Functions
+    ----------
+    */
+
+    // set the title 
+    set_title: function (settingsOverlay, title) {
+        settingsOverlay.getElementsByClassName("settings-title").item(0)
+            .textContent = title;
+    },
+
+    // set the names and ids of submittable/labeled inputs to their data-*
+    // values (for grouping functionality, eg. radio buttons)
+    assign_data_attrs: function (settingsOverlay) {
+        var submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
+        submittableInputs.forEach(function (elem) {
+            elem.name = elem.getAttribute('data-name');
+        });
+        var labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
+        labeledInputs.forEach(function (elem) {
+            elem.id = elem.getAttribute('data-id');
+        });
+    },
+
+    // unset the names and ids of submittable/labeled inputs from their
+    // data-* values (for grouping functionality, eg. radio buttons)
+    clear_data_attrs: function (settingsOverlay) {
+        var submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
+        submittableInputs.forEach(function (elem) {
+            elem.name = "";
+        });
+        var labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
+        labeledInputs.forEach(function (elem) {
+            elem.id = "";
+        });
+    },
+
+    // set the event listeners for all radio/checkbox inputs in the settings
+    // overlay
+    set_event_listeners: function (settingsOverlay) {
+        const _this = this; // Ah, joy.
+
+        var radioInputs = settingsOverlay.querySelectorAll("input[type=radio]");
+        radioInputs.forEach((radioInput) => {
+            radioInput.addEventListener("click", function () {
+                _this.activate_radio(this);
+            });
+        })
+
+        var checkboxInputs = settingsOverlay.querySelectorAll("input[type=checkbox]");
+        checkboxInputs.forEach((checkboxInput) => {
+            checkboxInput.addEventListener("click", function () {
+                _this.toggle_checkbox(this);
+            });
+        })
     },
 
     /*
@@ -241,6 +303,12 @@ var table = {
         var new_obj = template.firstElementChild.cloneNode(true);
         new_obj.classList.add("obj-instance", "obj-instance-table", "dropzone");
 
+        // Set up the object's settings
+        var settingsOverlay = new_obj
+            .getElementsByClassName("obj-instance-table-settings").item(0);
+        settings.set_event_listeners(settingsOverlay);
+
+        // Append the new object to the workspace
         target.appendChild(new_obj);
         return new_obj;
     },
@@ -255,14 +323,13 @@ var table = {
         var settingsOverlay = tbl
             .getElementsByClassName("obj-instance-table-settings").item(0);
 
-        // insert table's name into the settings overlay's title
+        // Set up the settings overlay
         var tblName = tbl.querySelector("[data-name=table-name]").value ||
             "[undefined]";
 
-        settingsOverlay
-            .getElementsByClassName("settings-title").item(0)
-            .textContent = tblName;
-        
+        settings.set_title(settingsOverlay, tblName)
+        settings.assign_data_attrs(settingsOverlay);
+
         // NOTE: See /static/js/interaction-notes.md
         tbl.classList.add("no-transform");
         
@@ -273,6 +340,9 @@ var table = {
         var tbl = get_container(inner_element, this.is_table);
         var settingsOverlay = tbl
             .getElementsByClassName("obj-instance-table-settings").item(0);
+
+        // Remove instance-unique (but not globally-unique) attrs
+        settings.clear_data_attrs(settingsOverlay);
 
         // Hide the overlay
         settingsOverlay.classList.add("hidden");
@@ -299,21 +369,10 @@ var field = {
         var new_obj = template.firstElementChild.cloneNode(true);
         new_obj.classList.add("obj-instance", "obj-instance-field", "dropzone");
 
-        // Set the event listeners for all radio/checkbox inputs of the object's
-        // settings
-        var radioInputs = new_obj.querySelectorAll("input[type=radio]");
-        radioInputs.forEach((radioInput) => {
-            radioInput.addEventListener("click", function () {
-                settings.activate_radio(this);
-            });
-        })
-
-        var checkboxInputs = new_obj.querySelectorAll("input[type=checkbox]");
-        checkboxInputs.forEach((checkboxInput) => {
-            checkboxInput.addEventListener("click", function () {
-                settings.toggle_checkbox(this);
-            });
-        })
+        // Set up the object's settings
+        var settingsOverlay = new_obj
+            .getElementsByClassName("obj-instance-field-settings").item(0);
+        settings.set_event_listeners(settingsOverlay);
 
         // Append the new object to the list of fields of the given table
         target.getElementsByClassName("obj-instance-table-fields").item(0)
@@ -339,26 +398,14 @@ var field = {
         var settingsOverlay = field
             .getElementsByClassName("obj-instance-field-settings").item(0);
 
-        // Insert table's and field's names into the settings overlay's title
+        // Set up the settings overlay
         var tblName = tbl.querySelector("[data-name=table-name]").value ||
             "[undefined]";
         var fieldName = field.querySelector("[data-name=field-name]").value ||
             "[undefined]";
 
-        settingsOverlay
-            .getElementsByClassName("settings-title").item(0)
-            .textContent = tblName+"."+fieldName;
-        
-        // Set the names and ids of submittable/labeled inputs to their data-*
-        // values (for grouping functionality, eg. radio buttons)
-        var submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
-        submittableInputs.forEach(function (elem) {
-            elem.name = elem.getAttribute('data-name');
-        });
-        var labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
-        labeledInputs.forEach(function (elem) {
-            elem.id = elem.getAttribute('data-id');
-        });
+        settings.set_title(settingsOverlay, tblName+"."+fieldName);
+        settings.assign_data_attrs(settingsOverlay);
 
         // NOTE: See /static/js/interaction-notes.md
         tbl.classList.add("no-transform");
@@ -372,16 +419,8 @@ var field = {
         var settingsOverlay = field
             .getElementsByClassName("obj-instance-field-settings").item(0);
 
-        // Unset the names and ids of submittable/labeled inputs from their
-        // data-* values (for grouping functionality, eg. radio buttons)
-        var submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
-        submittableInputs.forEach(function (elem) {
-            elem.name = "";
-        });
-        var labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
-        labeledInputs.forEach(function (elem) {
-            elem.id = "";
-        });
+        // Remove instance-unique (but not globally-unique) attrs
+        settings.clear_data_attrs(settingsOverlay);
 
         // Hide the overlay
         settingsOverlay.classList.add("hidden");
