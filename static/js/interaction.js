@@ -389,8 +389,7 @@ var field = {
 
     // move field to the target table
     move: function (field, target) {
-        var fields_div = target
-            .getElementsByClassName("obj-instance-table-fields").item(0)
+        target.getElementsByClassName("obj-instance-table-fields").item(0)
             .appendChild(field);
     },
 
