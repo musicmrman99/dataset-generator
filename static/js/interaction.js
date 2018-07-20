@@ -23,9 +23,9 @@ Draggable Types
 --------------------------------------------------
 */
 
-var base_draggable_callbacks = Object.freeze({
+const base_draggable_callbacks = Object.freeze({
     onstart: function (event) {
-        var target = event.target;
+        const target = event.target;
         if (target.getAttribute('data-x') == null) {
             target.setAttribute('data-x', 0);
         }
@@ -35,11 +35,11 @@ var base_draggable_callbacks = Object.freeze({
     },
 
     onmove: function (event) {
-        var target = event.target;
+        const target = event.target;
         
         // Implement 'normal' drag behaviour!
-        var x = parseFloat(target.getAttribute("data-x")) + event.dx;
-        var y = parseFloat(target.getAttribute("data-y")) + event.dy;
+        const x = parseFloat(target.getAttribute("data-x")) + event.dx;
+        const y = parseFloat(target.getAttribute("data-y")) + event.dy;
     
         target.style.webkitTransform =
         target.style.transform =
@@ -76,14 +76,14 @@ function draggable (assign) {
 }
 
 function resetting_draggable (assign) {
-    var base_draggable = draggable();
-    var base_draggable__onend = base_draggable.onend;
+    const base_draggable = draggable();
+    const base_draggable__onend = base_draggable.onend;
 
     return Object.assign(base_draggable, {
         onend: function (event) {
             base_draggable__onend(event);
 
-            var target = event.target;
+            const target = event.target;
     
             // Translate the element back to original position.
             target.style.webkitTransform =
@@ -126,7 +126,7 @@ function dropzone(type, assign) {
     }, assign)
 }
 
-var dz_types = Object.freeze({
+const dz_types = Object.freeze({
     create: "create",
     delete: "delete",
     move: "move"
@@ -138,12 +138,12 @@ Object and Object Instance Types (and their functions)
 */
 
 // fieldset types
-var fs_types = Object.freeze({
+const fs_types = Object.freeze({
     radio: "radio",
     checkbox: "checkbox"
 })
 
-var settings = {
+const settings = Object.freeze({
     /*
     Support Functions
     ----------
@@ -183,11 +183,11 @@ var settings = {
     // set the names and ids of submittable/labeled inputs to their data-*
     // values (for grouping functionality, eg. radio buttons)
     assign_data_attrs: function (settingsOverlay) {
-        var submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
+        const submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
         submittableInputs.forEach(function (elem) {
             elem.name = elem.getAttribute('data-name');
         });
-        var labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
+        const labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
         labeledInputs.forEach(function (elem) {
             elem.id = elem.getAttribute('data-id');
         });
@@ -196,11 +196,11 @@ var settings = {
     // unset the names and ids of submittable/labeled inputs from their
     // data-* values (for grouping functionality, eg. radio buttons)
     clear_data_attrs: function (settingsOverlay) {
-        var submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
+        const submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
         submittableInputs.forEach(function (elem) {
             elem.name = "";
         });
-        var labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
+        const labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
         labeledInputs.forEach(function (elem) {
             elem.id = "";
         });
@@ -211,14 +211,14 @@ var settings = {
     set_event_listeners: function (settingsOverlay) {
         const _this = this; // Ah, joy.
 
-        var radioInputs = settingsOverlay.querySelectorAll("input[type=radio]");
+        const radioInputs = settingsOverlay.querySelectorAll("input[type=radio]");
         radioInputs.forEach((radioInput) => {
             radioInput.addEventListener("click", function () {
                 _this.activate_radio(this);
             });
         })
 
-        var checkboxInputs = settingsOverlay.querySelectorAll("input[type=checkbox]");
+        const checkboxInputs = settingsOverlay.querySelectorAll("input[type=checkbox]");
         checkboxInputs.forEach((checkboxInput) => {
             checkboxInput.addEventListener("click", function () {
                 _this.toggle_checkbox(this);
@@ -236,10 +236,10 @@ var settings = {
     // done by the browser)
     activate_radio: function (selectedRadio) {
         // Get the previously selected radio of this container
-        var radioFieldset = get_container(selectedRadio, (elem) => {
+        const radioFieldset = get_container(selectedRadio, (elem) => {
             return this.is_fieldset(elem, fs_types.radio);
         });
-        var currentRadios = radioFieldset.querySelectorAll(
+        const currentRadios = radioFieldset.querySelectorAll(
             "input[type=radio][data-active]");
 
         // NOTE: this allows recursive input parameters (ie. an input with
@@ -284,9 +284,9 @@ var settings = {
             this.toggle_params(checkbox); // on/off
         }
     }
-}
+})
 
-var table = {
+const table = Object.freeze({
     // check if is the table type itself
     is_table_type: function (element) {
         return element.id === "obj-type-table";
@@ -299,13 +299,13 @@ var table = {
 
     // create a new table in target
     create: function (target) {
-        var template = document.getElementById("obj-type-table-template");
-        var new_obj = template.firstElementChild.cloneNode(true);
+        const template = document.getElementById("obj-type-table-template");
+        const new_obj = template.firstElementChild.cloneNode(true);
         new_obj.className = template.firstElementChild.className;
         new_obj.classList.add("dropzone");
 
         // Set up the object's settings
-        var settingsOverlay = new_obj
+        const settingsOverlay = new_obj
             .getElementsByClassName("obj-instance-table-settings").item(0);
         settings.set_event_listeners(settingsOverlay);
 
@@ -320,12 +320,12 @@ var table = {
     },
 
     open_settings: function (inner_element) {
-        var tbl = get_container(inner_element, this.is_table);
-        var settingsOverlay = tbl
+        const tbl = get_container(inner_element, this.is_table);
+        const settingsOverlay = tbl
             .getElementsByClassName("obj-instance-table-settings").item(0);
 
         // Set up the settings overlay
-        var tblName = tbl.querySelector("[data-name=table-name]").value ||
+        const tblName = tbl.querySelector("[data-name=table-name]").value ||
             "[undefined]";
 
         settings.set_title(settingsOverlay, tblName)
@@ -338,8 +338,8 @@ var table = {
         settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
-        var tbl = get_container(inner_element, this.is_table);
-        var settingsOverlay = tbl
+        const tbl = get_container(inner_element, this.is_table);
+        const settingsOverlay = tbl
             .getElementsByClassName("obj-instance-table-settings").item(0);
 
         // Remove instance-unique (but not globally-unique) attrs
@@ -351,9 +351,9 @@ var table = {
         // NOTE: See /static/js/interaction-notes.md
         tbl.classList.remove("no-transform");
     }
-}
+})
 
-var field = {
+const field = Object.freeze({
     // check if is the field type itself
     is_field_type: function(element) {
         return element.id === "obj-type-field";
@@ -366,13 +366,13 @@ var field = {
 
     // create a new field in the target table
     create: function (target) {
-        var template = document.getElementById("obj-type-field-template");
-        var new_obj = template.firstElementChild.cloneNode(true);
+        const template = document.getElementById("obj-type-field-template");
+        const new_obj = template.firstElementChild.cloneNode(true);
         new_obj.className = template.firstElementChild.className;
         new_obj.classList.add("dropzone");
 
         // Set up the object's settings
-        var settingsOverlay = new_obj
+        const settingsOverlay = new_obj
             .getElementsByClassName("obj-instance-field-settings").item(0);
         settings.set_event_listeners(settingsOverlay);
 
@@ -394,15 +394,15 @@ var field = {
     },
 
     open_settings: function (inner_element) {
-        var field = get_container(inner_element, this.is_field);
-        var tbl = get_container(field, table.is_table);
-        var settingsOverlay = field
+        const field = get_container(inner_element, this.is_field);
+        const tbl = get_container(field, table.is_table);
+        const settingsOverlay = field
             .getElementsByClassName("obj-instance-field-settings").item(0);
 
         // Set up the settings overlay
-        var tblName = tbl.querySelector("[data-name=table-name]").value ||
+        const tblName = tbl.querySelector("[data-name=table-name]").value ||
             "[undefined]";
-        var fieldName = field.querySelector("[data-name=field-name]").value ||
+        const fieldName = field.querySelector("[data-name=field-name]").value ||
             "[undefined]";
 
         settings.set_title(settingsOverlay, tblName+"."+fieldName);
@@ -416,9 +416,9 @@ var field = {
         settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
-        var field = get_container(inner_element, this.is_field);
-        var tbl = get_container(field, table.is_table);
-        var settingsOverlay = field
+        const field = get_container(inner_element, this.is_field);
+        const tbl = get_container(field, table.is_table);
+        const settingsOverlay = field
             .getElementsByClassName("obj-instance-field-settings").item(0);
 
         // Remove instance-unique (but not globally-unique) attrs
@@ -431,7 +431,7 @@ var field = {
         tbl.classList.remove("no-transform");
         field.classList.remove("no-transform");
     }
-}
+})
 
 /*
 Interaction Setup
@@ -439,8 +439,8 @@ Interaction Setup
 */
 
 function setup_workspace_dropzone () {
-    var base_drop = dropzone(dz_types.create);
-    var base_drop__ondrop = base_drop.ondrop;
+    const base_drop = dropzone(dz_types.create);
+    const base_drop__ondrop = base_drop.ondrop;
     interact("#workspace").dropzone(Object.assign(base_drop, {
         accept: "#obj-type-table",
         ondrop: function (event) {
@@ -451,8 +451,8 @@ function setup_workspace_dropzone () {
 }
 
 function setup_sidebar_dropzone () {
-    var base_drop = dropzone(dz_types.delete);
-    var base_drop__ondrop = base_drop.ondrop;
+    const base_drop = dropzone(dz_types.delete);
+    const base_drop__ondrop = base_drop.ondrop;
     interact("#sidebar").dropzone(Object.assign(base_drop, {
         accept: ".obj-instance-table, .obj-instance-field",
         ondrop: function (event) {
@@ -467,9 +467,9 @@ function setup_sidebar_dropzone () {
 }
 
 function setup_table_dropzone () {
-    var base_drop_create = dropzone(dz_types.create);
-    var base_drop_move = dropzone(dz_types.move);
-    var base_drop = {
+    const base_drop_create = dropzone(dz_types.create);
+    const base_drop_move = dropzone(dz_types.move);
+    const base_drop = {
         ondropactivate: function (event) {
             if (field.is_field_type(event.relatedTarget)) {
                 base_drop_create.ondropactivate(event);
@@ -506,7 +506,7 @@ function setup_table_dropzone () {
             }
         }
     }
-    var base_drop__ondrop = base_drop.ondrop;
+    const base_drop__ondrop = base_drop.ondrop;
 
     interact(".obj-instance-table").dropzone(Object.assign(base_drop, {
         accept: "#obj-type-field, .obj-instance-field",
@@ -540,7 +540,7 @@ setup_table_dropzone();
 
 document.getElementById("workspace").classList.add("dropzone");
 
-var elem_list = document.querySelectorAll("#sidebar");
+const elem_list = document.querySelectorAll("#sidebar");
 elem_list.forEach(function (elem) {
     elem.classList.add("dropzone");
 })
