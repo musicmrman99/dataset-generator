@@ -18,17 +18,17 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
             <p class="obj-type-name">Table</p>
             <img class="obj-type-img" src="{{ url_for('static', filename='images/table-icon.png') }}">
             <div class="hidden" id="obj-type-table-template">
-                <div class="obj-instance obj-instance-table">
+                <div class="obj-instance obj-instance-table padded">
                     <span>Table Name: tbl</span>
                     <input type="text" placeholder="NewTable" data-name="table-name"></input>
                     <button type="button" onclick="table.open_settings(this);" class="settings-button">
                         <img src="{{ url_for('static', filename='images/settings.png') }}" alt="table settings">
                     </button>
                     <div class="hidden overlay obj-instance-table-settings">
-                        <div class="overlay-content">
-                            <h1 class="settings-title">
+                        <div class="overlay-content padded">
+                            <h2 class="settings-title">
                                 <!-- header is set at runtime -->
-                            </h1>
+                            </h2>
                             <svg xmlns="http://www.w3.org/2000/svg"
                             onclick="table.close_settings(this);" class="overlay-close">
                                 <line x1="0" y1="0" x2="20" y2="20"/>
@@ -62,10 +62,10 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                         <img src="{{ url_for('static', filename='images/settings.png') }}" alt="field settings">
                     </button>
                     <div class="hidden overlay obj-instance-field-settings">
-                        <div class="overlay-content">
-                            <h1 class="settings-title">
+                        <div class="overlay-content padded">
+                            <h2 class="settings-title">
                                 <!-- header is set at runtime -->
-                            </h1>
+                            </h2>
                             <svg xmlns="http://www.w3.org/2000/svg"
                             onclick="field.close_settings(this);" class="overlay-close">
                                 <line x1="0" y1="0" x2="20" y2="20"/>
