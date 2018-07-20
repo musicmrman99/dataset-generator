@@ -301,7 +301,8 @@ var table = {
     create: function (target) {
         var template = document.getElementById("obj-type-table-template");
         var new_obj = template.firstElementChild.cloneNode(true);
-        new_obj.classList.add("obj-instance", "obj-instance-table", "dropzone");
+        new_obj.className = template.firstElementChild.className;
+        new_obj.classList.add("dropzone");
 
         // Set up the object's settings
         var settingsOverlay = new_obj
@@ -367,7 +368,8 @@ var field = {
     create: function (target) {
         var template = document.getElementById("obj-type-field-template");
         var new_obj = template.firstElementChild.cloneNode(true);
-        new_obj.classList.add("obj-instance", "obj-instance-field", "dropzone");
+        new_obj.className = template.firstElementChild.className;
+        new_obj.classList.add("dropzone");
 
         // Set up the object's settings
         var settingsOverlay = new_obj
