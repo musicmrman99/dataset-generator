@@ -103,6 +103,26 @@ img {
     max-height: 100%;
 }
 
+fieldset {
+    margin-top: 20px;
+    padding: 5px;
+    border: none;
+    border-top: 2px solid #000000;
+}
+legend {
+    padding: 0 5px;
+    font-weight: bold;
+}
+
+fieldset fieldset { border: none; }
+fieldset fieldset > legend {
+    padding: 0 5px;
+    font-weight: normal;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 1px 0px;
+}
+
 /* General Positioning and Sizing */
 /* -------------------------------------------------- */
 

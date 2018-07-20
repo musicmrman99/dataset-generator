@@ -1,6 +1,24 @@
 "use strict";
 
 /*
+Support Functions
+--------------------------------------------------
+*/
+
+// Get the container this element is in. An element is a container if
+// isContainer returns true, given that element.
+// If the given element is not in a container, then return null.
+function get_container (element, isContainer) {
+    while (!isContainer(element)) {
+        element = element.parentElement;
+        if (element == null) {
+            return null;
+        }
+    }
+    return element;
+}
+
+/*
 Draggable Types
 --------------------------------------------------
 */
@@ -119,6 +137,155 @@ Object and Object Instance Types (and their functions)
 --------------------------------------------------
 */
 
+// fieldset types
+var fs_types = Object.freeze({
+    radio: "radio",
+    checkbox: "checkbox"
+})
+
+var settings = {
+    /*
+    Support Functions
+    ----------
+    */
+
+    // check if is a fieldset
+    // if type is given, the fieldset must be of that type as well
+    is_fieldset: function (element, type) {
+        return (element.nodeName.toLowerCase() === "fieldset") && 
+            (element.getAttribute("data-input-type") === type);
+    },
+
+    // check if has parameters
+    has_params: function (input) {
+        return (input.parentElement // should be a div
+            .getElementsByClassName("input-params").length != 0);
+    },
+
+    // toggle (show/hide) the parameters sub-section of an input
+    toggle_params: function (input) {
+        input.parentElement // should be a div
+            .getElementsByClassName("input-params").item(0)
+            .classList.toggle("hidden");
+    },
+
+    /*
+    Setup + Tear-down Functions
+    ----------
+    */
+
+    // set the title 
+    set_title: function (settingsOverlay, title) {
+        settingsOverlay.getElementsByClassName("settings-title").item(0)
+            .textContent = title;
+    },
+
+    // set the names and ids of submittable/labeled inputs to their data-*
+    // values (for grouping functionality, eg. radio buttons)
+    assign_data_attrs: function (settingsOverlay) {
+        var submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
+        submittableInputs.forEach(function (elem) {
+            elem.name = elem.getAttribute('data-name');
+        });
+        var labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
+        labeledInputs.forEach(function (elem) {
+            elem.id = elem.getAttribute('data-id');
+        });
+    },
+
+    // unset the names and ids of submittable/labeled inputs from their
+    // data-* values (for grouping functionality, eg. radio buttons)
+    clear_data_attrs: function (settingsOverlay) {
+        var submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
+        submittableInputs.forEach(function (elem) {
+            elem.name = "";
+        });
+        var labeledInputs = settingsOverlay.querySelectorAll("[data-id]");
+        labeledInputs.forEach(function (elem) {
+            elem.id = "";
+        });
+    },
+
+    // set the event listeners for all radio/checkbox inputs in the settings
+    // overlay
+    set_event_listeners: function (settingsOverlay) {
+        const _this = this; // Ah, joy.
+
+        var radioInputs = settingsOverlay.querySelectorAll("input[type=radio]");
+        radioInputs.forEach((radioInput) => {
+            radioInput.addEventListener("click", function () {
+                _this.activate_radio(this);
+            });
+        })
+
+        var checkboxInputs = settingsOverlay.querySelectorAll("input[type=checkbox]");
+        checkboxInputs.forEach((checkboxInput) => {
+            checkboxInput.addEventListener("click", function () {
+                _this.toggle_checkbox(this);
+            });
+        })
+    },
+
+    /*
+    Radio Buttons
+    ----------
+    */
+
+    // activate the given radio button (likely being passed 'this' on click)
+    // this handles all of the work *other than* the actual switching (which is
+    // done by the browser)
+    activate_radio: function (selectedRadio) {
+        // Get the previously selected radio of this container
+        var radioFieldset = get_container(selectedRadio, (elem) => {
+            return this.is_fieldset(elem, fs_types.radio);
+        });
+        var currentRadios = radioFieldset.querySelectorAll(
+            "input[type=radio][data-active]");
+
+        // NOTE: this allows recursive input parameters (ie. an input with
+        //       parameters, which have parameters, etc.) by limiting the
+        //       'active input' to this input set.
+        // NOTE: this is linear time, so large inputs (HTML) may be problematic
+        var currentRadio = null;
+        for (var i=0; 0 < currentRadios.length; i++) {
+            if (get_container(currentRadios[i], (elem) => {
+                return this.is_fieldset(elem, fs_types.radio);
+            }) === radioFieldset) {
+                currentRadio = currentRadios[i];
+                break;
+            }
+        }
+
+        // De-select previously selected radio
+        if (currentRadio != null) {
+            currentRadio.removeAttribute("data-active");
+            if (this.has_params(currentRadio)) {
+                this.toggle_params(currentRadio); // off
+            }
+        }
+
+        // Select new radio
+        selectedRadio.setAttribute("data-active", "true");
+        if (this.has_params(selectedRadio)) {
+            this.toggle_params(selectedRadio); // on
+        }
+    },
+
+    /*
+    Checkboxes
+    ----------
+    */
+
+    // toggle the given checkbox (likely being passed 'this' on click)
+    // this handles all of the work *other than* the actual check/uncheck (which
+    // is done by the browser)
+    toggle_checkbox: function (checkbox) {
+        if (this.has_params(checkbox)) {
+            this.toggle_params(checkbox); // on/off
+        }
+    }
+}
+
 var table = {
     // check if is the table type itself
     is_table_type: function (element) {
@@ -130,48 +297,58 @@ var table = {
         return element.classList.contains("obj-instance-table");
     },
 
-    // get the table this element belongs to
-    // if it doesn't belong to a table, then return null
-    get_container: function (element) {
-        while (!this.is_table(element)) {
-            element = element.parentElement;
-            if (element == null) {
-                return null;
-            }
-        }
-        return element;
-    },
-
     // create a new table in target
     create: function (target) {
         var template = document.getElementById("obj-type-table-template");
         var new_obj = template.firstElementChild.cloneNode(true);
         new_obj.classList.add("obj-instance", "obj-instance-table", "dropzone");
 
+        // Set up the object's settings
+        var settingsOverlay = new_obj
+            .getElementsByClassName("obj-instance-table-settings").item(0);
+        settings.set_event_listeners(settingsOverlay);
+
+        // Append the new object to the workspace
         target.appendChild(new_obj);
         return new_obj;
     },
 
     // delete table
-    delete: function (table) {
-        table.remove();
+    delete: function (tbl) {
+        tbl.remove();
     },
 
     open_settings: function (inner_element) {
-        var table = this.get_container(inner_element);
+        var tbl = get_container(inner_element, this.is_table);
+        var settingsOverlay = tbl
+            .getElementsByClassName("obj-instance-table-settings").item(0);
+
+        // Set up the settings overlay
+        var tblName = tbl.querySelector("[data-name=table-name]").value ||
+            "[undefined]";
+
+        settings.set_title(settingsOverlay, tblName)
+        settings.assign_data_attrs(settingsOverlay);
 
         // NOTE: See /static/js/interaction-notes.md
-        table.classList.add("no-transform");
-        table.getElementsByClassName("obj-instance-table-settings").item(0)
-            .classList.remove("hidden");
+        tbl.classList.add("no-transform");
+        
+        // Show the overlay
+        settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
-        var table = this.get_container(inner_element);
+        var tbl = get_container(inner_element, this.is_table);
+        var settingsOverlay = tbl
+            .getElementsByClassName("obj-instance-table-settings").item(0);
+
+        // Remove instance-unique (but not globally-unique) attrs
+        settings.clear_data_attrs(settingsOverlay);
+
+        // Hide the overlay
+        settingsOverlay.classList.add("hidden");
 
         // NOTE: See /static/js/interaction-notes.md
-        table.classList.remove("no-transform");
-        table.getElementsByClassName("obj-instance-table-settings").item(0)
-            .classList.add("hidden");
+        tbl.classList.remove("no-transform");
     }
 }
 
@@ -186,24 +363,18 @@ var field = {
         return element.classList.contains("obj-instance-field");
     },
 
-    // get the field this element belongs to
-    // if it doesn't belong to a field, then return null
-    get_container: function (element) {
-        while (!this.is_field(element)) {
-            element = element.parentElement;
-            if (element == null) {
-                return null;
-            }
-        }
-        return element;
-    },
-
     // create a new field in the target table
     create: function (target) {
         var template = document.getElementById("obj-type-field-template");
         var new_obj = template.firstElementChild.cloneNode(true);
         new_obj.classList.add("obj-instance", "obj-instance-field", "dropzone");
 
+        // Set up the object's settings
+        var settingsOverlay = new_obj
+            .getElementsByClassName("obj-instance-field-settings").item(0);
+        settings.set_event_listeners(settingsOverlay);
+
+        // Append the new object to the list of fields of the given table
         target.getElementsByClassName("obj-instance-table-fields").item(0)
             .appendChild(new_obj);
         return new_obj;
@@ -222,24 +393,42 @@ var field = {
     },
 
     open_settings: function (inner_element) {
-        var field = this.get_container(inner_element);
+        var field = get_container(inner_element, this.is_field);
+        var tbl = get_container(field, table.is_table);
+        var settingsOverlay = field
+            .getElementsByClassName("obj-instance-field-settings").item(0);
+
+        // Set up the settings overlay
+        var tblName = tbl.querySelector("[data-name=table-name]").value ||
+            "[undefined]";
+        var fieldName = field.querySelector("[data-name=field-name]").value ||
+            "[undefined]";
+
+        settings.set_title(settingsOverlay, tblName+"."+fieldName);
+        settings.assign_data_attrs(settingsOverlay);
 
         // NOTE: See /static/js/interaction-notes.md
-        var tbl = table.get_container(field);
         tbl.classList.add("no-transform");
+        field.classList.add("no-transform");
 
-        field.getElementsByClassName("obj-instance-field-settings").item(0)
-            .classList.remove("hidden");
+        // Show the overlay
+        settingsOverlay.classList.remove("hidden");
     },
     close_settings: function (inner_element) {
-        var field = this.get_container(inner_element);
+        var field = get_container(inner_element, this.is_field);
+        var tbl = get_container(field, table.is_table);
+        var settingsOverlay = field
+            .getElementsByClassName("obj-instance-field-settings").item(0);
+
+        // Remove instance-unique (but not globally-unique) attrs
+        settings.clear_data_attrs(settingsOverlay);
+
+        // Hide the overlay
+        settingsOverlay.classList.add("hidden");
 
         // NOTE: See /static/js/interaction-notes.md
-        var tbl = table.get_container(field);
         tbl.classList.remove("no-transform");
-
-        field.getElementsByClassName("obj-instance-field-settings").item(0)
-            .classList.add("hidden");
+        field.classList.remove("no-transform");
     }
 }
 
