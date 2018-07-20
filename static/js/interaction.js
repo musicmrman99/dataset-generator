@@ -530,15 +530,8 @@ setup_workspace_dropzone();
 setup_sidebar_dropzone();
 setup_table_dropzone();
 
-// Add the dropzone class to relevant DOM Elements
+// Add the dropzone class to relevant initial DOM Elements
 // ----------
 
 document.getElementById("workspace").classList.add("dropzone");
-
-const elem_list = document.querySelectorAll("#sidebar");
-elem_list.forEach(function (elem) {
-    elem.classList.add("dropzone");
-})
-
-// The dropzone class is set upon creation of objects.
-// See table.create() and field.create()
+document.getElementById("sidebar").classList.add("dropzone");
