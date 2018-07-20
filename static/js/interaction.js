@@ -409,6 +409,7 @@ var field = {
 
         // NOTE: See /static/js/interaction-notes.md
         tbl.classList.add("no-transform");
+        field.classList.add("no-transform");
 
         // Show the overlay
         settingsOverlay.classList.remove("hidden");
@@ -427,6 +428,7 @@ var field = {
 
         // NOTE: See /static/js/interaction-notes.md
         tbl.classList.remove("no-transform");
+        field.classList.remove("no-transform");
     }
 }
 
