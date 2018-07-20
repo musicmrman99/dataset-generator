@@ -95,6 +95,13 @@ Dropzone Types
 --------------------------------------------------
 */
 
+// dropzone types
+const dz_types = Object.freeze({
+    create: "create",
+    delete: "delete",
+    move: "move"
+})
+
 function dropzone(type, assign) {
     return Object.assign({
         accept: "*",
@@ -119,12 +126,6 @@ function dropzone(type, assign) {
         }
     }, assign)
 }
-
-const dz_types = Object.freeze({
-    create: "create",
-    delete: "delete",
-    move: "move"
-})
 
 /*
 Object and Object Instance Types (and their functions)
