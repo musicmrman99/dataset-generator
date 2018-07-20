@@ -160,7 +160,7 @@ const settings = Object.freeze({
     // toggle (show/hide) the parameters sub-section of an input
     toggle_params: function (input) {
         input.parentElement // should be a div
-            .getElementsByClassName("input-params").item(0)
+            .getElementsByClassName("input-params")[0]
             .classList.toggle("hidden");
     },
 
@@ -171,7 +171,7 @@ const settings = Object.freeze({
 
     // set the title 
     set_title: function (settingsOverlay, title) {
-        settingsOverlay.getElementsByClassName("settings-title").item(0)
+        settingsOverlay.getElementsByClassName("settings-title")[0]
             .textContent = title;
     },
 
@@ -301,7 +301,7 @@ const table = Object.freeze({
 
         // Set up the object's settings
         const settingsOverlay = new_obj
-            .getElementsByClassName("obj-instance-table-settings").item(0);
+            .getElementsByClassName("obj-instance-table-settings")[0];
         settings.set_event_listeners(settingsOverlay);
 
         // Append the new object to the workspace
@@ -317,7 +317,7 @@ const table = Object.freeze({
     open_settings: function (inner_element) {
         const tbl = get_container(inner_element, this.is_table);
         const settingsOverlay = tbl
-            .getElementsByClassName("obj-instance-table-settings").item(0);
+            .getElementsByClassName("obj-instance-table-settings")[0];
 
         // Set up the settings overlay
         const tblName = tbl.querySelector("[data-name=table-name]").value ||
@@ -335,7 +335,7 @@ const table = Object.freeze({
     close_settings: function (inner_element) {
         const tbl = get_container(inner_element, this.is_table);
         const settingsOverlay = tbl
-            .getElementsByClassName("obj-instance-table-settings").item(0);
+            .getElementsByClassName("obj-instance-table-settings")[0];
 
         // Remove instance-unique (but not globally-unique) attrs
         settings.clear_data_attrs(settingsOverlay);
@@ -368,11 +368,11 @@ const field = Object.freeze({
 
         // Set up the object's settings
         const settingsOverlay = new_obj
-            .getElementsByClassName("obj-instance-field-settings").item(0);
+            .getElementsByClassName("obj-instance-field-settings")[0];
         settings.set_event_listeners(settingsOverlay);
 
         // Append the new object to the list of fields of the given table
-        target.getElementsByClassName("obj-instance-table-fields").item(0)
+        target.getElementsByClassName("obj-instance-table-fields")[0]
             .appendChild(new_obj);
         return new_obj;
     },
@@ -384,7 +384,7 @@ const field = Object.freeze({
 
     // move field to the target table
     move: function (field, target) {
-        target.getElementsByClassName("obj-instance-table-fields").item(0)
+        target.getElementsByClassName("obj-instance-table-fields")[0]
             .appendChild(field);
     },
 
@@ -392,7 +392,7 @@ const field = Object.freeze({
         const field = get_container(inner_element, this.is_field);
         const tbl = get_container(field, table.is_table);
         const settingsOverlay = field
-            .getElementsByClassName("obj-instance-field-settings").item(0);
+            .getElementsByClassName("obj-instance-field-settings")[0];
 
         // Set up the settings overlay
         const tblName = tbl.querySelector("[data-name=table-name]").value ||
@@ -414,7 +414,7 @@ const field = Object.freeze({
         const field = get_container(inner_element, this.is_field);
         const tbl = get_container(field, table.is_table);
         const settingsOverlay = field
-            .getElementsByClassName("obj-instance-field-settings").item(0);
+            .getElementsByClassName("obj-instance-field-settings")[0];
 
         // Remove instance-unique (but not globally-unique) attrs
         settings.clear_data_attrs(settingsOverlay);
