@@ -8,8 +8,8 @@ Support Functions
 // Get the container this element is in. An element is a container if
 // isContainer returns true, given that element.
 // If the given element is not in a container, then return null.
-function get_container (element, isContainer) {
-    while (!isContainer(element)) {
+function get_container (element, is_container) {
+    while (!is_container(element)) {
         element = element.parentElement;
         if (element == null) {
             return null;
@@ -23,7 +23,7 @@ Draggable Types
 --------------------------------------------------
 */
 
-function restrictTo (restriction, assign) {
+function restrict_to (restriction, assign) {
     return Object.assign({
         restriction: (restriction != null ? restriction : "#content"),
         endOnly: false, // restrict during drag
@@ -38,7 +38,7 @@ function draggable (assign) {
         ignoreFrom: "input, button, a, .overlay",
 
         // can only be moved within the content area
-        restrict: restrictTo(null),
+        restrict: restrict_to(null),
 
         onstart: function (event) {
             const target = event.target;
@@ -70,12 +70,12 @@ function draggable (assign) {
 }
 
 function resetting_draggable (assign) {
-    const base_draggable = draggable();
-    const base_draggable__onend = base_draggable.onend;
+    const baseDraggable = draggable();
+    const baseDraggable__onend = baseDraggable.onend;
 
-    return Object.assign(base_draggable, {
+    return Object.assign(baseDraggable, {
         onend: function (event) {
-            base_draggable__onend(event);
+            baseDraggable__onend(event);
 
             const target = event.target;
     
@@ -96,7 +96,7 @@ Dropzone Types
 */
 
 // dropzone types
-const dz_types = Object.freeze({
+const dzTypes = Object.freeze({
     create: "create",
     delete: "delete",
     move: "move"
@@ -133,7 +133,7 @@ Object and Object Instance Types (and their functions)
 */
 
 // fieldset types
-const fs_types = Object.freeze({
+const fsTypes = Object.freeze({
     radio: "radio",
     checkbox: "checkbox"
 })
@@ -204,19 +204,19 @@ const settings = Object.freeze({
     // set the event listeners for all radio/checkbox inputs in the settings
     // overlay
     set_event_listeners: function (settingsOverlay) {
-        const _this = this; // Ah, joy.
+        const this_ = this; // Ah, joy.
 
         const radioInputs = settingsOverlay.querySelectorAll("input[type=radio]");
         radioInputs.forEach((radioInput) => {
             radioInput.addEventListener("click", function () {
-                _this.activate_radio(this);
+                this_.activate_radio(this);
             });
         })
 
         const checkboxInputs = settingsOverlay.querySelectorAll("input[type=checkbox]");
         checkboxInputs.forEach((checkboxInput) => {
             checkboxInput.addEventListener("click", function () {
-                _this.toggle_checkbox(this);
+                this_.toggle_checkbox(this);
             });
         })
     },
@@ -232,7 +232,7 @@ const settings = Object.freeze({
     activate_radio: function (selectedRadio) {
         // Get the previously selected radio of this container
         const radioFieldset = get_container(selectedRadio, (elem) => {
-            return this.is_fieldset(elem, fs_types.radio);
+            return this.is_fieldset(elem, fsTypes.radio);
         });
         const currentRadios = radioFieldset.querySelectorAll(
             "input[type=radio][data-active]");
@@ -244,7 +244,7 @@ const settings = Object.freeze({
         var currentRadio = null;
         for (var i=0; 0 < currentRadios.length; i++) {
             if (get_container(currentRadios[i], (elem) => {
-                return this.is_fieldset(elem, fs_types.radio);
+                return this.is_fieldset(elem, fsTypes.radio);
             }) === radioFieldset) {
                 currentRadio = currentRadios[i];
                 break;
@@ -295,18 +295,18 @@ const table = Object.freeze({
     // create a new table in target
     create: function (target) {
         const template = document.getElementById("obj-type-table-template");
-        const new_obj = template.firstElementChild.cloneNode(true);
-        new_obj.className = template.firstElementChild.className;
-        new_obj.classList.add("dropzone");
+        const newObj = template.firstElementChild.cloneNode(true);
+        newObj.className = template.firstElementChild.className;
+        newObj.classList.add("dropzone");
 
         // Set up the object's settings
-        const settingsOverlay = new_obj
+        const settingsOverlay = newObj
             .getElementsByClassName("obj-instance-table-settings")[0];
         settings.set_event_listeners(settingsOverlay);
 
         // Append the new object to the workspace
-        target.appendChild(new_obj);
-        return new_obj;
+        target.appendChild(newObj);
+        return newObj;
     },
 
     // delete table
@@ -314,8 +314,8 @@ const table = Object.freeze({
         tbl.remove();
     },
 
-    open_settings: function (inner_element) {
-        const tbl = get_container(inner_element, this.is_table);
+    open_settings: function (innerElement) {
+        const tbl = get_container(innerElement, this.is_table);
         const settingsOverlay = tbl
             .getElementsByClassName("obj-instance-table-settings")[0];
 
@@ -332,8 +332,8 @@ const table = Object.freeze({
         // Show the overlay
         settingsOverlay.classList.remove("hidden");
     },
-    close_settings: function (inner_element) {
-        const tbl = get_container(inner_element, this.is_table);
+    close_settings: function (innerElement) {
+        const tbl = get_container(innerElement, this.is_table);
         const settingsOverlay = tbl
             .getElementsByClassName("obj-instance-table-settings")[0];
 
@@ -362,19 +362,19 @@ const field = Object.freeze({
     // create a new field in the target table
     create: function (target) {
         const template = document.getElementById("obj-type-field-template");
-        const new_obj = template.firstElementChild.cloneNode(true);
-        new_obj.className = template.firstElementChild.className;
-        new_obj.classList.add("dropzone");
+        const newObj = template.firstElementChild.cloneNode(true);
+        newObj.className = template.firstElementChild.className;
+        newObj.classList.add("dropzone");
 
         // Set up the object's settings
-        const settingsOverlay = new_obj
+        const settingsOverlay = newObj
             .getElementsByClassName("obj-instance-field-settings")[0];
         settings.set_event_listeners(settingsOverlay);
 
         // Append the new object to the list of fields of the given table
         target.getElementsByClassName("obj-instance-table-fields")[0]
-            .appendChild(new_obj);
-        return new_obj;
+            .appendChild(newObj);
+        return newObj;
     },
 
     // delete field
@@ -388,8 +388,8 @@ const field = Object.freeze({
             .appendChild(field);
     },
 
-    open_settings: function (inner_element) {
-        const field = get_container(inner_element, this.is_field);
+    open_settings: function (innerElement) {
+        const field = get_container(innerElement, this.is_field);
         const tbl = get_container(field, table.is_table);
         const settingsOverlay = field
             .getElementsByClassName("obj-instance-field-settings")[0];
@@ -410,8 +410,8 @@ const field = Object.freeze({
         // Show the overlay
         settingsOverlay.classList.remove("hidden");
     },
-    close_settings: function (inner_element) {
-        const field = get_container(inner_element, this.is_field);
+    close_settings: function (innerElement) {
+        const field = get_container(innerElement, this.is_field);
         const tbl = get_container(field, table.is_table);
         const settingsOverlay = field
             .getElementsByClassName("obj-instance-field-settings")[0];
@@ -434,24 +434,24 @@ Interaction Setup
 */
 
 function setup_workspace_dropzone () {
-    const base_drop = dropzone(dz_types.create);
-    const base_drop__ondrop = base_drop.ondrop;
-    interact("#workspace").dropzone(Object.assign(base_drop, {
+    const baseDrop = dropzone(dzTypes.create);
+    const baseDrop__ondrop = baseDrop.ondrop;
+    interact("#workspace").dropzone(Object.assign(baseDrop, {
         accept: "#obj-type-table",
         ondrop: function (event) {
-            base_drop__ondrop(event);
+            baseDrop__ondrop(event);
             table.create(event.target)
         }
     }));
 }
 
 function setup_sidebar_dropzone () {
-    const base_drop = dropzone(dz_types.delete);
-    const base_drop__ondrop = base_drop.ondrop;
-    interact("#sidebar").dropzone(Object.assign(base_drop, {
+    const baseDrop = dropzone(dzTypes.delete);
+    const baseDrop__ondrop = baseDrop.ondrop;
+    interact("#sidebar").dropzone(Object.assign(baseDrop, {
         accept: ".obj-instance-table, .obj-instance-field",
         ondrop: function (event) {
-            base_drop__ondrop(event);
+            baseDrop__ondrop(event);
             if (table.is_table(event.relatedTarget)) {
                 table.delete(event.relatedTarget);
             } else if (field.is_field(event.relatedTarget)) {
@@ -462,51 +462,51 @@ function setup_sidebar_dropzone () {
 }
 
 function setup_table_dropzone () {
-    const base_drop_create = dropzone(dz_types.create);
-    const base_drop_move = dropzone(dz_types.move);
-    const base_drop = {
+    const baseDropCreate = dropzone(dzTypes.create);
+    const baseDropMove = dropzone(dzTypes.move);
+    const baseDrop = {
         ondropactivate: function (event) {
             if (field.is_field_type(event.relatedTarget)) {
-                base_drop_create.ondropactivate(event);
+                baseDropCreate.ondropactivate(event);
             } else if (field.is_field(event.relatedTarget)) {
-                base_drop_move.ondropactivate(event);
+                baseDropMove.ondropactivate(event);
             }
         },
         ondragenter: function (event) {
             if (field.is_field_type(event.relatedTarget)) {
-                base_drop_create.ondragenter(event);
+                baseDropCreate.ondragenter(event);
             } else if (field.is_field(event.relatedTarget)) {
-                base_drop_move.ondragenter(event);
+                baseDropMove.ondragenter(event);
             }
         },
         ondragleave: function (event) {
             if (field.is_field_type(event.relatedTarget)) {
-                base_drop_create.ondragleave(event);
+                baseDropCreate.ondragleave(event);
             } else if (field.is_field(event.relatedTarget)) {
-                base_drop_move.ondragleave(event);
+                baseDropMove.ondragleave(event);
             }
         },
         ondrop: function (event) {
             if (field.is_field_type(event.relatedTarget)) {
-                base_drop_create.ondrop(event);
+                baseDropCreate.ondrop(event);
             } else if (field.is_field(event.relatedTarget)) {
-                base_drop_move.ondrop(event);
+                baseDropMove.ondrop(event);
             }
         },
         ondropdeactivate: function (event) {
             if (field.is_field_type(event.relatedTarget)) {
-                base_drop_create.ondropdeactivate(event);
+                baseDropCreate.ondropdeactivate(event);
             } else if (field.is_field(event.relatedTarget)) {
-                base_drop_move.ondropdeactivate(event);
+                baseDropMove.ondropdeactivate(event);
             }
         }
     }
-    const base_drop__ondrop = base_drop.ondrop;
+    const baseDrop__ondrop = baseDrop.ondrop;
 
-    interact(".obj-instance-table").dropzone(Object.assign(base_drop, {
+    interact(".obj-instance-table").dropzone(Object.assign(baseDrop, {
         accept: "#obj-type-field, .obj-instance-field",
         ondrop: function (event) {
-            base_drop__ondrop(event);
+            baseDrop__ondrop(event);
             if (field.is_field_type(event.relatedTarget)) {
                 field.create(event.target);
             } else if (field.is_field(event.relatedTarget)) {
