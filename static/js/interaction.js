@@ -28,7 +28,7 @@ function restrict_to (restriction, assign) {
         restriction: (restriction != null ? restriction : "#content"),
         endOnly: false, // restrict during drag
         elementRect: { top: 0, left: 0, bottom: 1, right: 1 } // use the whole content
-    }, assign)
+    }, assign);
 }
 
 function draggable (assign) {
@@ -100,7 +100,7 @@ const dzTypes = Object.freeze({
     create: "create",
     delete: "delete",
     move: "move"
-})
+});
 
 function dropzone(type, assign) {
     return Object.assign({
@@ -124,7 +124,7 @@ function dropzone(type, assign) {
             event.target.classList.remove("dropzone-"+type+"-dragactive");
             event.target.classList.remove("dropzone-"+type+"-active");
         }
-    }, assign)
+    }, assign);
 }
 
 /*
@@ -136,7 +136,7 @@ Object and Object Instance Types (and their functions)
 const fsTypes = Object.freeze({
     radio: "radio",
     checkbox: "checkbox"
-})
+});
 
 const settings = Object.freeze({
     /*
@@ -206,19 +206,21 @@ const settings = Object.freeze({
     set_event_listeners: function (settingsOverlay) {
         const this_ = this; // Ah, joy.
 
-        const radioInputs = settingsOverlay.querySelectorAll("input[type=radio]");
+        const radioInputs = settingsOverlay.querySelectorAll(
+            "input[type=radio]");
         radioInputs.forEach((radioInput) => {
             radioInput.addEventListener("click", function () {
                 this_.activate_radio(this);
             });
-        })
+        });
 
-        const checkboxInputs = settingsOverlay.querySelectorAll("input[type=checkbox]");
+        const checkboxInputs = settingsOverlay.querySelectorAll(
+            "input[type=checkbox]");
         checkboxInputs.forEach((checkboxInput) => {
             checkboxInput.addEventListener("click", function () {
                 this_.toggle_checkbox(this);
             });
-        })
+        });
     },
 
     /*
@@ -279,7 +281,7 @@ const settings = Object.freeze({
             this.toggle_params(checkbox); // on/off
         }
     }
-})
+});
 
 const table = Object.freeze({
     // check if is the table type itself
@@ -323,7 +325,7 @@ const table = Object.freeze({
         const tblName = tbl.querySelector("[data-name=table-name]").value ||
             "[undefined]";
 
-        settings.set_title(settingsOverlay, tblName)
+        settings.set_title(settingsOverlay, tblName);
         settings.assign_data_attrs(settingsOverlay);
 
         // NOTE: See /static/js/interaction-notes.md
@@ -346,7 +348,7 @@ const table = Object.freeze({
         // NOTE: See /static/js/interaction-notes.md
         tbl.classList.remove("no-transform");
     }
-})
+});
 
 const field = Object.freeze({
     // check if is the field type itself
@@ -426,7 +428,7 @@ const field = Object.freeze({
         tbl.classList.remove("no-transform");
         field.classList.remove("no-transform");
     }
-})
+});
 
 /*
 Interaction Setup
@@ -440,7 +442,7 @@ function setup_workspace_dropzone () {
         accept: "#obj-type-table",
         ondrop: function (event) {
             baseDrop__ondrop(event);
-            table.create(event.target)
+            table.create(event.target);
         }
     }));
 }
@@ -500,7 +502,7 @@ function setup_table_dropzone () {
                 baseDropMove.ondropdeactivate(event);
             }
         }
-    }
+    };
     const baseDrop__ondrop = baseDrop.ondrop;
 
     interact(".obj-instance-table").dropzone(Object.assign(baseDrop, {
