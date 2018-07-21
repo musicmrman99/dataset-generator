@@ -6,7 +6,7 @@ Support Functions
 */
 
 // Get the container this element is in. An element is a container if
-// isContainer returns true, given that element.
+// is_container returns true, given that element.
 // If the given element is not in a container, then return null.
 function get_container (element, is_container) {
     while (!is_container(element)) {
@@ -23,6 +23,12 @@ Draggable Types
 --------------------------------------------------
 */
 
+/**
+ * Return an object that can be given for the 'restriction' property in an
+ * initialiser for InteractJS's .draggable() method.
+ * Implements basic restriction - to the entire rect of the element given.
+ * Default to the '#content' element.
+ */
 function restrict_to (restriction, assign) {
     return Object.assign({
         restriction: (restriction != null ? restriction : "#content"),
@@ -31,6 +37,11 @@ function restrict_to (restriction, assign) {
     }, assign);
 }
 
+/**
+ * Return an initialiser object for InteractJS's .draggable() method.
+ * 
+ * Implements the basic behaviour of a draggable object - to move when dragged.
+ */
 function draggable (assign) {
     return Object.assign({
         inertia: false, // disable inertial throwing
@@ -69,6 +80,11 @@ function draggable (assign) {
     }, assign);
 }
 
+/**
+ * Return an initialiser object for InteractJS's .draggable() method.
+ * 
+ * Implements behaviour of a draggable resetting its position when dropped.
+ */
 function resetting_draggable (assign) {
     const baseDraggable = draggable();
     const baseDraggable__onend = baseDraggable.onend;
@@ -95,13 +111,23 @@ Dropzone Types
 --------------------------------------------------
 */
 
-// dropzone types
+/**
+ * Enum: Dropzone Types
+ * 
+ * The types of dropzone. Use these when constructing a dropzone.
+ */
 const dzTypes = Object.freeze({
     create: "create",
     delete: "delete",
     move: "move"
 });
 
+/**
+ * Return an initialiser object for InteractJS's .dropzone() method.
+ * 
+ * Implements basic dropzone behaviour - outline on drag and hover of a
+ * draggable.
+ */
 function dropzone(type, assign) {
     return Object.assign({
         accept: "*",
@@ -132,35 +158,56 @@ Object and Object Instance Types (and their functions)
 --------------------------------------------------
 */
 
-// fieldset types
+/**
+ * Enum: Fieldset Types
+ * 
+ * The valid types of fieldset (in addition to the generic type), as given in
+ * the 'data-input-type' attribute. This attribute contains an invalid value if
+ * it is not defined in this enum.
+ */
 const fsTypes = Object.freeze({
     radio: "radio",
     checkbox: "checkbox"
 });
 
+/** Contains methods and event handlers relating to the settings of objects. */
 const settings = Object.freeze({
     /*
     Support Functions
     ----------
     */
 
-    // check if is a fieldset
-    // if type is given, the fieldset must be of that type as well
+    /**
+     * Check if element is a fieldset.
+     * 
+     * If type is given, the fieldset must additionally be of that type. See
+     * fsTypes.
+     */
     is_fieldset: function (element, type) {
         return (element.nodeName.toLowerCase() === "fieldset") && 
             (element.getAttribute("data-input-type") === type);
     },
 
-    // check if has parameters
+    /**
+     * Check if the given <input> element has parameters associated with it.
+     * 
+     * An element has parameters if it has a <div> element with the class
+     * "input-params" in its parent's node tree.
+     */
     has_params: function (input) {
-        return (input.parentElement // should be a div
+        // NOTE: input.parentElement should be a div, but doesn't have to be.
+        return (input.parentElement
             .getElementsByClassName("input-params").length != 0);
     },
 
-    // toggle (show/hide) the parameters sub-section of an input
+    /**
+     * Toggle (show/hide) the parameters of the given <input> element.
+     * 
+     * See has_params().
+     */
     toggle_params: function (input) {
-        input.parentElement // should be a div
-            .getElementsByClassName("input-params")[0]
+        // NOTE: input.parentElement should be a div, but doesn't have to be.
+        input.parentElement.getElementsByClassName("input-params")[0]
             .classList.toggle("hidden");
     },
 
@@ -169,14 +216,38 @@ const settings = Object.freeze({
     ----------
     */
 
-    // set the title 
+    /**
+     * Set the title of the given settings overlay (a DOM element) to the given
+     * string.
+     */
     set_title: function (settingsOverlay, title) {
         settingsOverlay.getElementsByClassName("settings-title")[0]
             .textContent = title;
     },
 
-    // set the names and ids of submittable/labeled inputs to their data-*
-    // values (for grouping functionality, eg. radio buttons)
+    /**
+     * Copy specific 'data-*' attributes of relevant inputs in the given
+     * settings overlay (a DOM element) to their respective standard attributes.
+     * 
+     * For example, copy the 'data-name' attribute to the 'name' attribute.
+     * 
+     * This system facilitates object-specific grouping functionality, rather
+     * than document-wide grouping (which would cause mis-behaviour). As there
+     * may be multiple 'objects' (eg. tables) that share the same template, if
+     * some attributes were set in the template, every object of that type would
+     * have the same values. For most attributes, this would likely not be a
+     * problem, but for others (such as 'name' and 'id') it would break the
+     * 'unique' requirement of the DOM.
+     * 
+     * It would also create mis-behaviour, such as for radio buttons - multiple
+     * table objects with the same 'name' for some of its settings would result
+     * in mutual exclusivity across tables! As such, these attributes must be
+     * set dynamically to avoid document-wide grouping or 'unique'-breaking
+     * values.
+     * 
+     * Currently, this only sets the 'name' and 'id' attributes to their
+     * 'data-*' values.
+     */
     assign_data_attrs: function (settingsOverlay) {
         const submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
         submittableInputs.forEach(function (elem) {
@@ -188,8 +259,12 @@ const settings = Object.freeze({
         });
     },
 
-    // unset the names and ids of submittable/labeled inputs from their
-    // data-* values (for grouping functionality, eg. radio buttons)
+    /**
+     * Unset specific attributes of relevant inputs (set them to "") in the
+     * settings overlay (a DOM element).
+     * 
+     * See assign_data_attrs().
+     */
     clear_data_attrs: function (settingsOverlay) {
         const submittableInputs = settingsOverlay.querySelectorAll("[data-name]");
         submittableInputs.forEach(function (elem) {
@@ -201,8 +276,13 @@ const settings = Object.freeze({
         });
     },
 
-    // set the event listeners for all radio/checkbox inputs in the settings
-    // overlay
+    /**
+     * Set the event listeners for all relevant inputs in the given settings
+     * overlay (a DOM element).
+     * 
+     * Currently, this only sets the event listeners for <input> elements of
+     * type "radio" and "checkbox".
+     */
     set_event_listeners: function (settingsOverlay) {
         const this_ = this; // Ah, joy.
 
@@ -228,9 +308,15 @@ const settings = Object.freeze({
     ----------
     */
 
-    // activate the given radio button (likely being passed 'this' on click)
-    // this handles all of the work *other than* the actual switching (which is
-    // done by the browser)
+    /**
+     * Activate the given radio button (<input type="radio">).
+     * 
+     * This handles all of the work *other than* the actual switching (which is
+     * done by the browser).
+     * 
+     * Practically, this is likely being passed 'this' on the radio's click
+     * event.
+     */
     activate_radio: function (selectedRadio) {
         // Get the previously selected radio of this container
         const radioFieldset = get_container(selectedRadio, (elem) => {
@@ -239,10 +325,11 @@ const settings = Object.freeze({
         const currentRadios = radioFieldset.querySelectorAll(
             "input[type=radio][data-active]");
 
-        // NOTE: this allows recursive input parameters (ie. an input with
+        // NOTE: This allows recursive input parameters (ie. an input with
         //       parameters, which have parameters, etc.) by limiting the
         //       'active input' to this input set.
-        // NOTE: this is linear time, so large inputs (HTML) may be problematic
+        // NOTE: This is linear time (worst-case), so large inputs (HTML) may be
+        //       problematic.
         var currentRadio = null;
         for (var i=0; 0 < currentRadios.length; i++) {
             if (get_container(currentRadios[i], (elem) => {
@@ -273,9 +360,15 @@ const settings = Object.freeze({
     ----------
     */
 
-    // toggle the given checkbox (likely being passed 'this' on click)
-    // this handles all of the work *other than* the actual check/uncheck (which
-    // is done by the browser)
+    /**
+     * Toggle the given checkbox's checked status (<input type="checkbox">).
+     * 
+     * This handles all of the work *other than* the actual check/uncheck (which
+     * is done by the browser).
+     * 
+     * Practically, this is likely being passed 'this' on the checkbox's click
+     * event.
+     */
     toggle_checkbox: function (checkbox) {
         if (this.has_params(checkbox)) {
             this.toggle_params(checkbox); // on/off
@@ -283,18 +376,19 @@ const settings = Object.freeze({
     }
 });
 
+/** Contains methods and event handlers relating to table objects. */
 const table = Object.freeze({
-    // check if is the table type itself
+    /** Check if element is the table type itself. */
     is_table_type: function (element) {
         return element.id === "obj-type-table";
     },
 
-    // check if is a table instance
+    /** Check if element is a table instance. */
     is_table: function (element) {
         return element.classList.contains("obj-instance-table");
     },
 
-    // create a new table in target
+    /** Create a new table in target (a DOM element). */
     create: function (target) {
         const template = document.getElementById("obj-type-table-template");
         const newObj = template.firstElementChild.cloneNode(true);
@@ -311,11 +405,12 @@ const table = Object.freeze({
         return newObj;
     },
 
-    // delete table
+    /** Delete the given table (a DOM element). */
     delete: function (tbl) {
         tbl.remove();
     },
 
+    /** Open the settings overlay for the table innerElement is contained in. */
     open_settings: function (innerElement) {
         const tbl = get_container(innerElement, this.is_table);
         const settingsOverlay = tbl
@@ -334,6 +429,8 @@ const table = Object.freeze({
         // Show the overlay
         settingsOverlay.classList.remove("hidden");
     },
+
+    /** Close the settings overlay for the table innerElement is contained in. */
     close_settings: function (innerElement) {
         const tbl = get_container(innerElement, this.is_table);
         const settingsOverlay = tbl
@@ -350,18 +447,19 @@ const table = Object.freeze({
     }
 });
 
+/** Contains methods and event handlers relating to field objects */
 const field = Object.freeze({
-    // check if is the field type itself
+    /** Check if element is the field type itself. */
     is_field_type: function(element) {
         return element.id === "obj-type-field";
     },
 
-    // check if is a field instance
+    /** Check if element is a field instance. */
     is_field: function (element) {
         return element.classList.contains("obj-instance-field");
     },
 
-    // create a new field in the target table
+    /** Create a new field in the target table (a DOM element). */
     create: function (target) {
         const template = document.getElementById("obj-type-field-template");
         const newObj = template.firstElementChild.cloneNode(true);
@@ -379,17 +477,20 @@ const field = Object.freeze({
         return newObj;
     },
 
-    // delete field
+    /** Delete the given field (a DOM element). */
     delete: function (field) {
         field.remove();
     },
 
-    // move field to the target table
+    /**
+     * Move the given field (a DOM element) to the target table (a DOM element).
+     */
     move: function (field, target) {
         target.getElementsByClassName("obj-instance-table-fields")[0]
             .appendChild(field);
     },
 
+    /** Open the settings overlay for the field innerElement is contained in. */
     open_settings: function (innerElement) {
         const field = get_container(innerElement, this.is_field);
         const tbl = get_container(field, table.is_table);
@@ -412,6 +513,8 @@ const field = Object.freeze({
         // Show the overlay
         settingsOverlay.classList.remove("hidden");
     },
+
+    /** Close the settings overlay for the field innerElement is contained in. */
     close_settings: function (innerElement) {
         const field = get_container(innerElement, this.is_field);
         const tbl = get_container(field, table.is_table);
@@ -435,6 +538,11 @@ Interaction Setup
 --------------------------------------------------
 */
 
+/**
+ * Set up the workspace as a dropzone.
+ * 
+ * This dropzone responds to the table type - to drop create new tables in it.
+ */
 function setup_workspace_dropzone () {
     const baseDrop = dropzone(dzTypes.create);
     const baseDrop__ondrop = baseDrop.ondrop;
@@ -447,6 +555,12 @@ function setup_workspace_dropzone () {
     }));
 }
 
+/**
+ * Set up the sidebar as a dropzone.
+ * 
+ * This dropzone responds to object instances (currently tables and fields), to
+ * delete objects dragged into it.
+ */
 function setup_sidebar_dropzone () {
     const baseDrop = dropzone(dzTypes.delete);
     const baseDrop__ondrop = baseDrop.ondrop;
@@ -463,6 +577,12 @@ function setup_sidebar_dropzone () {
     }));
 }
 
+/**
+ * Set up tables as dropzones.
+ * 
+ * These dropzones respond to the field object type, to create new fields, and
+ * field instance objects, to move those objects into the table.
+ */
 function setup_table_dropzone () {
     const baseDropCreate = dropzone(dzTypes.create);
     const baseDropMove = dropzone(dzTypes.move);
