@@ -17,6 +17,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
         <div class="obj-type padded" id="obj-type-table">
             <p class="obj-type-name">Table</p>
             <img class="obj-type-img" src="{{ url_for('static', filename='images/table-icon.png') }}">
+
             <div class="hidden" id="obj-type-table-template">
                 <div class="obj-instance obj-instance-table padded">
                     <span>Table Name: tbl</span>
@@ -24,6 +25,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                     <button type="button" class="settings-button">
                         <img src="{{ url_for('static', filename='images/settings.png') }}" alt="table settings">
                     </button>
+                    
                     <div class="hidden overlay obj-instance-table-settings">
                         <div class="overlay-content padded">
                             <h2 class="settings-title">
@@ -43,6 +45,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                             </fieldset>
                         </div>
                     </div>
+
                     <hr>
                     <div class="obj-instance-table-fields">
                         <!-- fields go here -->
@@ -50,9 +53,11 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                 </div>
             </div>
         </div>
+
         <div class="obj-type padded" id="obj-type-field">
             <p class="obj-type-name">Field</p>
             <img class="obj-type-img" src="{{ url_for('static', filename='images/field-icon.png') }}">
+
             <div class="hidden" id="obj-type-field-template">
                 <div class="obj-instance obj-instance-field">
                     <span>Name: </span>
@@ -60,6 +65,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                     <button type="button" class="settings-button">
                         <img src="{{ url_for('static', filename='images/settings.png') }}" alt="field settings">
                     </button>
+
                     <div class="hidden overlay obj-instance-field-settings">
                         <div class="overlay-content padded">
                             <h2 class="settings-title">
@@ -107,6 +113,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
 
                                 <fieldset>
                                     <legend>Personal Detail Generators</legend>
+
                                     <div>
                                         <input type="radio" value="first-name" data-id="first-name" data-name="data-type" />
                                         <label for="first-name">First Name</label>
@@ -125,6 +132,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
 
                                 <fieldset>
                                     <legend>Integer Generators</legend>
+                                    
                                     <div>
                                         <input type="radio" value="int-sequence" data-id="int-sequence" data-name="data-type" />
                                         <label for="int-sequence">Sequence</label>
@@ -142,6 +150,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
 
                                             <fieldset data-input-type="radio">
                                                 <legend>Sequence Type</legend>
+
                                                 <div>
                                                     <input type="radio" value="int-sequence-infinite" data-id="int-sequence-infinite" data-name="int-sequence-type" checked>
                                                     <label for="int-sequence-infinite">Infinite Sequence</label>
@@ -182,6 +191,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
 
                                 <fieldset>
                                     <legend>Float Generators</legend>
+
                                     <div>
                                         <input type="radio" value="float-sequence" data-id="float-sequence" data-name="data-type" />
                                         <label for="float-sequence">Sequence</label>
@@ -199,6 +209,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
 
                                             <fieldset data-input-type="radio">
                                                 <legend>Sequence Type</legend>
+
                                                 <div>
                                                     <input type="radio" value="float-sequence-infinite" data-id="float-sequence-infinite" data-name="float-sequence-type" checked>
                                                     <label for="float-sequence-infinite">Infinite Sequence</label>
@@ -248,6 +259,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
             </div>
         </div>
     </div>
+    
     <div id="workspace" class="span span-10">
         <!-- dynamic content (created from JS) -->
     </div>
