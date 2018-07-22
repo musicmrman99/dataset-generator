@@ -303,6 +303,24 @@ const settings = Object.freeze({
         });
     },
 
+    /**
+     * Set the callback to call when the 'X' button is clicked.
+     * 
+     * NOTE: By default, 'this' inside the callback is the 'X' button itself.
+     *       This can be overridden by passing this_.
+     */
+    set_close_operation: function (settingsOverlay, callback, this_) {
+        const closeButton = settingsOverlay
+            .getElementsByClassName("overlay-close")[0];
+
+        if (this_ == null) {
+            this_ = closeButton;
+        }
+        closeButton.addEventListener("click", function () {
+            callback.call(this_);
+        });
+    },
+
     /*
     Radio Buttons
     ----------
@@ -390,15 +408,26 @@ const table = Object.freeze({
 
     /** Create a new table in target (a DOM element). */
     create: function (target) {
+        const this_ = this;
+
         const template = document.getElementById("obj-type-table-template");
         const newObj = template.firstElementChild.cloneNode(true);
         newObj.className = template.firstElementChild.className;
         newObj.classList.add("dropzone");
 
         // Set up the object's settings
+        newObj.getElementsByClassName("settings-button")[0]
+            .addEventListener("click", function() {
+                this_.open_settings(this);
+            });
+
         const settingsOverlay = newObj
             .getElementsByClassName("obj-instance-table-settings")[0];
+
         settings.set_event_listeners(settingsOverlay);
+        settings.set_close_operation(settingsOverlay, function () {
+            this_.close_settings(this);
+        });
 
         // Append the new object to the workspace
         target.appendChild(newObj);
@@ -461,15 +490,26 @@ const field = Object.freeze({
 
     /** Create a new field in the target table (a DOM element). */
     create: function (target) {
+        const this_ = this;
+
         const template = document.getElementById("obj-type-field-template");
         const newObj = template.firstElementChild.cloneNode(true);
         newObj.className = template.firstElementChild.className;
         newObj.classList.add("dropzone");
 
         // Set up the object's settings
+        newObj.getElementsByClassName("settings-button")[0]
+            .addEventListener("click", function() {
+                this_.open_settings(this);
+            });
+
         const settingsOverlay = newObj
             .getElementsByClassName("obj-instance-field-settings")[0];
+
         settings.set_event_listeners(settingsOverlay);
+        settings.set_close_operation(settingsOverlay, function () {
+            this_.close_settings(this);
+        });
 
         // Append the new object to the list of fields of the given table
         target.getElementsByClassName("obj-instance-table-fields")[0]

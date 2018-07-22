@@ -21,7 +21,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                 <div class="obj-instance obj-instance-table padded">
                     <span>Table Name: tbl</span>
                     <input type="text" placeholder="NewTable" data-name="table-name"></input>
-                    <button type="button" onclick="table.open_settings(this);" class="settings-button">
+                    <button type="button" class="settings-button">
                         <img src="{{ url_for('static', filename='images/settings.png') }}" alt="table settings">
                     </button>
                     <div class="hidden overlay obj-instance-table-settings">
@@ -29,8 +29,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                             <h2 class="settings-title">
                                 <!-- header is set at runtime -->
                             </h2>
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                            onclick="table.close_settings(this);" class="overlay-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="overlay-close">
                                 <line x1="0" y1="0" x2="20" y2="20"/>
                                 <line x1="0" y1="20" x2="20" y2="0"/>
                             </svg>
@@ -58,7 +57,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                 <div class="obj-instance obj-instance-field">
                     <span>Name: </span>
                     <input type="text" placeholder="NewField" data-name="field-name"></input>
-                    <button type="button" onclick="field.open_settings(this);" class="settings-button">
+                    <button type="button" class="settings-button">
                         <img src="{{ url_for('static', filename='images/settings.png') }}" alt="field settings">
                     </button>
                     <div class="hidden overlay obj-instance-field-settings">
@@ -66,8 +65,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                             <h2 class="settings-title">
                                 <!-- header is set at runtime -->
                             </h2>
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                            onclick="field.close_settings(this);" class="overlay-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="overlay-close">
                                 <line x1="0" y1="0" x2="20" y2="20"/>
                                 <line x1="0" y1="20" x2="20" y2="0"/>
                             </svg>
