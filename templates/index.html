@@ -17,20 +17,21 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
         <div class="obj-type padded" id="obj-type-table">
             <p class="obj-type-name">Table</p>
             <img class="obj-type-img" src="{{ url_for('static', filename='images/table-icon.png') }}">
+
             <div class="hidden" id="obj-type-table-template">
                 <div class="obj-instance obj-instance-table padded">
                     <span>Table Name: tbl</span>
                     <input type="text" placeholder="NewTable" data-name="table-name"></input>
-                    <button type="button" onclick="table.open_settings(this);" class="settings-button">
+                    <button type="button" class="settings-button">
                         <img src="{{ url_for('static', filename='images/settings.png') }}" alt="table settings">
                     </button>
+                    
                     <div class="hidden overlay obj-instance-table-settings">
                         <div class="overlay-content padded">
                             <h2 class="settings-title">
                                 <!-- header is set at runtime -->
                             </h2>
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                            onclick="table.close_settings(this);" class="overlay-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="overlay-close">
                                 <line x1="0" y1="0" x2="20" y2="20"/>
                                 <line x1="0" y1="20" x2="20" y2="0"/>
                             </svg>
@@ -39,11 +40,12 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                                 <legend>General</legend>
                                 <div>
                                     <label for="records">Number of records to generate:</label>
-                                    <input type="text" data-id="records" data-name="records" value="0" />
+                                    <input type="number" step="1" min="0" value="0" data-id="records" data-name="records" />
                                 </div>
                             </fieldset>
                         </div>
                     </div>
+
                     <hr>
                     <div class="obj-instance-table-fields">
                         <!-- fields go here -->
@@ -51,23 +53,25 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                 </div>
             </div>
         </div>
+
         <div class="obj-type padded" id="obj-type-field">
             <p class="obj-type-name">Field</p>
             <img class="obj-type-img" src="{{ url_for('static', filename='images/field-icon.png') }}">
+
             <div class="hidden" id="obj-type-field-template">
                 <div class="obj-instance obj-instance-field">
                     <span>Name: </span>
                     <input type="text" placeholder="NewField" data-name="field-name"></input>
-                    <button type="button" onclick="field.open_settings(this);" class="settings-button">
+                    <button type="button" class="settings-button">
                         <img src="{{ url_for('static', filename='images/settings.png') }}" alt="field settings">
                     </button>
+
                     <div class="hidden overlay obj-instance-field-settings">
                         <div class="overlay-content padded">
                             <h2 class="settings-title">
                                 <!-- header is set at runtime -->
                             </h2>
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                            onclick="field.close_settings(this);" class="overlay-close">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="overlay-close">
                                 <line x1="0" y1="0" x2="20" y2="20"/>
                                 <line x1="0" y1="20" x2="20" y2="0"/>
                             </svg>
@@ -84,7 +88,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                                     <input type="checkbox" value="fkey" data-id="fkey" data-name="fkey" />
                                     <label for="fkey">Foreign Key</label>
 
-                                    <div class="hidden input-params" data-for="fkey">
+                                    <div class="hidden input-params">
                                         <div>
                                             <label for="fkey-table">Table:</label>
                                             <span>tbl</span>
@@ -109,6 +113,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
 
                                 <fieldset>
                                     <legend>Personal Detail Generators</legend>
+
                                     <div>
                                         <input type="radio" value="first-name" data-id="first-name" data-name="data-type" />
                                         <label for="first-name">First Name</label>
@@ -127,23 +132,25 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
 
                                 <fieldset>
                                     <legend>Integer Generators</legend>
+                                    
                                     <div>
                                         <input type="radio" value="int-sequence" data-id="int-sequence" data-name="data-type" />
                                         <label for="int-sequence">Sequence</label>
 
-                                        <div class="hidden input-params" data-for="int-sequence">
+                                        <div class="hidden input-params">
                                             <div>
                                                 <label for="int-sequence-start-value">Start Value:</label>
-                                                <input type="text" data-id="int-sequence-start-value" data-name="int-sequence-start-value" />
+                                                <input type="number" step="1" data-id="int-sequence-start-value" data-name="int-sequence-start-value" />
                                             </div>
 
                                             <div>
                                                 <label for="int-sequence-step">Step:</label>
-                                                <input type="text" data-id="int-sequence-step" data-name="int-sequence-step" />
+                                                <input type="number" step="1" data-id="int-sequence-step" data-name="int-sequence-step" />
                                             </div>
 
                                             <fieldset data-input-type="radio">
                                                 <legend>Sequence Type</legend>
+
                                                 <div>
                                                     <input type="radio" value="int-sequence-infinite" data-id="int-sequence-infinite" data-name="int-sequence-type" checked>
                                                     <label for="int-sequence-infinite">Infinite Sequence</label>
@@ -153,10 +160,10 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                                                     <input type="radio" value="int-sequence-loop" data-id="int-sequence-loop" data-name="int-sequence-type">
                                                     <label for="int-sequence-loop">Looping Sequence</label>
 
-                                                    <div class="hidden input-params" data-for="int-sequence-loop">
+                                                    <div class="hidden input-params">
                                                         <div>
                                                             <label for="int-sequence-loop-value">Value to loop at:</label>
-                                                            <input type="text" data-id="int-sequence-loop-value" data-name="int-sequence-loop-value" />
+                                                            <input type="number" step="1" data-id="int-sequence-loop-value" data-name="int-sequence-loop-value" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -168,15 +175,15 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                                         <input type="radio" value="int-random" data-id="int-random" data-name="data-type" />
                                         <label for="int-random">Random</label>
 
-                                        <div class="hidden input-params" data-for="int-random">
+                                        <div class="hidden input-params">
                                             <div>
                                                 <label for="int-random-lower-value">Start Value:</label>
-                                                <input type="text" data-id="int-random-start-value" data-name="int-random-start-value" />
+                                                <input type="number" step="1" data-id="int-random-start-value" data-name="int-random-start-value" />
                                             </div>
 
                                             <div>
                                                 <label for="int-random-end-value">End Value:</label>
-                                                <input type="text" data-id="int-random-end-value" data-name="int-random-end-value" />
+                                                <input type="number" step="1" data-id="int-random-end-value" data-name="int-random-end-value" />
                                             </div>
                                         </div>
                                     </div>
@@ -184,23 +191,25 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
 
                                 <fieldset>
                                     <legend>Float Generators</legend>
+
                                     <div>
                                         <input type="radio" value="float-sequence" data-id="float-sequence" data-name="data-type" />
                                         <label for="float-sequence">Sequence</label>
 
-                                        <div class="hidden input-params" data-for="float-sequence">
+                                        <div class="hidden input-params">
                                             <div>
                                                 <label for="float-sequence-start-value">Start Value:</label>
-                                                <input type="text" data-id="float-sequence-start-value" data-name="float-sequence-start-value" />
+                                                <input type="number" step="any" data-id="float-sequence-start-value" data-name="float-sequence-start-value" />
                                             </div>
 
                                             <div>
                                                 <label for="float-sequence-step">Step:</label>
-                                                <input type="text" data-id="float-sequence-step" data-name="float-sequence-step" />
+                                                <input type="number" step="any" data-id="float-sequence-step" data-name="float-sequence-step" />
                                             </div>
 
                                             <fieldset data-input-type="radio">
                                                 <legend>Sequence Type</legend>
+
                                                 <div>
                                                     <input type="radio" value="float-sequence-infinite" data-id="float-sequence-infinite" data-name="float-sequence-type" checked>
                                                     <label for="float-sequence-infinite">Infinite Sequence</label>
@@ -210,10 +219,10 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                                                     <input type="radio" value="float-sequence-loop" data-id="float-sequence-loop" data-name="float-sequence-type">
                                                     <label for="float-sequence-loop">Looping Sequence</label>
 
-                                                    <div class="hidden input-params" data-for="float-sequence-loop">
+                                                    <div class="hidden input-params">
                                                         <div>
                                                             <label for="float-sequence-loop-value">Value to loop at:</label>
-                                                            <input type="text" data-id="float-sequence-loop-value" data-name="float-sequence-loop-value" />
+                                                            <input type="number" step="any" data-id="float-sequence-loop-value" data-name="float-sequence-loop-value" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -225,20 +234,20 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
                                         <input type="radio" value="float-random" data-id="float-random" data-name="data-type" />
                                         <label for="float-random">Random</label>
 
-                                        <div class="hidden input-params" data-for="float-random">
+                                        <div class="hidden input-params">
                                             <div>
                                                 <label for="float-random-lower-value">Start Value:</label>
-                                                <input type="text" data-id="float-random-start-value" data-name="float-random-start-value" />
+                                                <input type="number" step="any" data-id="float-random-start-value" data-name="float-random-start-value" />
                                             </div>
 
                                             <div>
                                                 <label for="float-random-end-value">End Value:</label>
-                                                <input type="text" data-id="float-random-end-value" data-name="float-random-end-value" />
+                                                <input type="number" step="any" data-id="float-random-end-value" data-name="float-random-end-value" />
                                             </div>
 
                                             <div>
                                                 <label for="float-random-round">Round to Nearest:</label>
-                                                <input type="text" data-id="float-random-round" data-name="float-random-round" />
+                                                <input type="number" step="any" data-id="float-random-round" data-name="float-random-round" />
                                             </div>
                                         </div>
                                     </div>
@@ -250,6 +259,7 @@ https://developer.mozilla.org/en-US/docs/Web/CSS/user-select -->
             </div>
         </div>
     </div>
+
     <div id="workspace" class="span span-10">
         <!-- dynamic content (created from JS) -->
     </div>
