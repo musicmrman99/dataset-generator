@@ -31,8 +31,13 @@ const settings = Object.freeze({
      * fsTypes.
      */
     is_fieldset: function (element, type) {
-        return (element.nodeName.toLowerCase() === "fieldset") && 
-            (element.getAttribute("data-input-type") === type);
+        const isFieldset = (element.nodeName.toLowerCase() === "fieldset");
+        var isType = true;
+        if (type != null) {
+            isType = (element.getAttribute("data-input-type") === type);
+        }
+
+        return isFieldset && isType;
     },
 
     /**
