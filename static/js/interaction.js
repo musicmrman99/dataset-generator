@@ -1,5 +1,8 @@
 "use strict";
 
+// DEPENDS: objects.js
+// DEPENDS: data.js
+
 /*
 Support Functions
 --------------------------------------------------
@@ -277,3 +280,24 @@ setup_table_dropzone();
 
 document.getElementById("workspace").classList.add("dropzone");
 document.getElementById("sidebar").classList.add("dropzone");
+
+/*
+Interaction Setup for External Resources
+--------------------------------------------------
+*/
+
+// Server communication (POST and response)
+document.getElementById("generate").addEventListener("click", function () {
+    document.getElementById("results").textContent =
+        JSON.stringify(
+            data.build(document.getElementById("workspace"))
+        );
+    
+    document.getElementById("results-overlay").classList.remove("hidden");
+});
+
+const test = document.createElement("div");
+test.classList.add("hidden", "overlay");
+test.id = "results-overlay";
+test.innerHTML = '<div class="overlay-content padded"><p id="results"></p></div>'
+document.getElementsByTagName("body")[0].appendChild(test);

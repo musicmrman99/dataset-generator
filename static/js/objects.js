@@ -53,14 +53,23 @@ const settings = Object.freeze({
     },
 
     /**
+     * Return the parameters of the given input, or null if it has none.
+     * 
+     * See has_params().
+     */
+    get_params: function (input) {
+        // NOTE: input.parentElement should be a div, but doesn't have to be.
+        return input.parentElement.getElementsByClassName("input-params")[0] ||
+            null;
+    },
+
+    /**
      * Toggle (show/hide) the parameters of the given <input> element.
      * 
      * See has_params().
      */
     toggle_params: function (input) {
-        // NOTE: input.parentElement should be a div, but doesn't have to be.
-        input.parentElement.getElementsByClassName("input-params")[0]
-            .classList.toggle("hidden");
+        this.get_params(input).classList.toggle("hidden");
     },
 
     /*
